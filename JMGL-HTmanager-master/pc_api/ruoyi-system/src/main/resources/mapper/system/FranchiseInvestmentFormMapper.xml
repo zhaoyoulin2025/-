@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FranchiseInvestmentFormMapper">
+    
+    <resultMap type="FranchiseInvestmentForm" id="FranchiseInvestmentFormResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="province"    column="province"    />
+        <result property="residence"    column="residence"    />
+        <result property="frequentStore"    column="frequent_store"    />
+        <result property="businessCategory"    column="business_category"    />
+        <result property="storeType"    column="store_type"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="investmentBudget"    column="investment_budget"    />
+        <result property="cooperationMode"    column="cooperation_mode"    />
+        <result property="expectedStoreAddress"    column="expected_store_address"    />
+        <result property="expectedProvince"    column="expected_province"    />
+        <result property="expectedCity"    column="expected_city"    />
+        <result property="expectedDistrict"    column="expected_district"    />
+        <result property="industry"    column="industry"    />
+        <result property="developmentOpinion"    column="development_opinion"    />
+        <result property="selectionReason"    column="selection_reason"    />
+        <result property="improvementSuggestion"    column="improvement_suggestion"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="businessDistrict"    column="business_district"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFranchiseInvestmentFormVo">
+        select id, name, phone, province,business_category, residence, frequent_store, store_type, remarks, investment_budget, cooperation_mode, expected_store_address, expected_province, expected_city, expected_district, industry, development_opinion, selection_reason, improvement_suggestion, business_district, create_time from franchise_investment_form
+    </sql>
+
+    <select id="selectFranchiseInvestmentFormList" parameterType="FranchiseInvestmentForm" resultMap="FranchiseInvestmentFormResult">
+        <include refid="selectFranchiseInvestmentFormVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="clientId != null  and clientId != ''"> and client_id = #{clientId}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="residence != null  and residence != ''"> and residence = #{residence}</if>
+            <if test="frequentStore != null  and frequentStore != ''"> and frequent_store = #{frequentStore}</if>
+            <if test="storeType != null  and storeType != ''"> and store_type = #{storeType}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="investmentBudget != null  and investmentBudget != ''"> and investment_budget = #{investmentBudget}</if>
+            <if test="cooperationMode != null  and cooperationMode != ''"> and cooperation_mode = #{cooperationMode}</if>
+            <if test="expectedStoreAddress != null  and expectedStoreAddress != ''"> and expected_store_address = #{expectedStoreAddress}</if>
+            <if test="expectedProvince != null  and expectedProvince != ''"> and expected_province = #{expectedProvince}</if>
+            <if test="expectedCity != null  and expectedCity != ''"> and expected_city = #{expectedCity}</if>
+            <if test="expectedDistrict != null  and expectedDistrict != ''"> and expected_district = #{expectedDistrict}</if>
+            <if test="industry != null  and industry != ''"> and industry = #{industry}</if>
+            <if test="developmentOpinion != null  and developmentOpinion != ''"> and development_opinion = #{developmentOpinion}</if>
+            <if test="selectionReason != null  and selectionReason != ''"> and selection_reason = #{selectionReason}</if>
+            <if test="improvementSuggestion != null  and improvementSuggestion != ''"> and improvement_suggestion = #{improvementSuggestion}</if>
+            <if test="businessDistrict != null  and businessDistrict != ''"> and business_district = #{businessDistrict}</if>
+        </where>
+    </select>
+    
+    <select id="selectFranchiseInvestmentFormById" parameterType="Integer" resultMap="FranchiseInvestmentFormResult">
+        <include refid="selectFranchiseInvestmentFormVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectFranchiseInvestmentFormByClientId" parameterType="Integer" resultMap="FranchiseInvestmentFormResult">
+        <include refid="selectFranchiseInvestmentFormVo"/>
+        where client_id = #{id}
+    </select>
+
+    <insert id="insertFranchiseInvestmentForm" parameterType="FranchiseInvestmentForm" useGeneratedKeys="true" keyProperty="id">
+        insert into franchise_investment_form
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="province != null and province != ''">province,</if>
+            <if test="residence != null and residence != ''">residence,</if>
+            <if test="frequentStore != null">frequent_store,</if>
+            <if test="storeType != null and storeType != ''">store_type,</if>
+            <if test="clientId != null  and clientId != ''"> client_id ,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="investmentBudget != null and investmentBudget != ''">investment_budget,</if>
+            <if test="cooperationMode != null and cooperationMode != ''">cooperation_mode,</if>
+            <if test="expectedStoreAddress != null">expected_store_address,</if>
+            <if test="expectedProvince != null">expected_province,</if>
+            <if test="expectedCity != null">expected_city,</if>
+            <if test="expectedDistrict != null">expected_district,</if>
+            <if test="industry != null and industry != ''">industry,</if>
+            <if test="developmentOpinion != null and developmentOpinion != ''">development_opinion,</if>
+            <if test="selectionReason != null and selectionReason != ''">selection_reason,</if>
+            <if test="improvementSuggestion != null">improvement_suggestion,</if>
+            <if test="businessDistrict != null">business_district,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="province != null and province != ''">#{province},</if>
+            <if test="residence != null and residence != ''">#{residence},</if>
+            <if test="frequentStore != null">#{frequentStore},</if>
+            <if test="storeType != null and storeType != ''">#{storeType},</if>
+            <if test="clientId != null and clientId != ''">#{clientId},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="investmentBudget != null and investmentBudget != ''">#{investmentBudget},</if>
+            <if test="cooperationMode != null and cooperationMode != ''">#{cooperationMode},</if>
+            <if test="expectedStoreAddress != null">#{expectedStoreAddress},</if>
+            <if test="expectedProvince != null">#{expectedProvince},</if>
+            <if test="expectedCity != null">#{expectedCity},</if>
+            <if test="expectedDistrict != null">#{expectedDistrict},</if>
+            <if test="industry != null and industry != ''">#{industry},</if>
+            <if test="developmentOpinion != null and developmentOpinion != ''">#{developmentOpinion},</if>
+            <if test="selectionReason != null and selectionReason != ''">#{selectionReason},</if>
+            <if test="improvementSuggestion != null">#{improvementSuggestion},</if>
+            <if test="businessDistrict != null">#{businessDistrict},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFranchiseInvestmentForm" parameterType="FranchiseInvestmentForm">
+        update franchise_investment_form
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="province != null and province != ''">province = #{province},</if>
+            <if test="residence != null and residence != ''">residence = #{residence},</if>
+            <if test="clientId != null and clientId != ''">client_id = #{clientId},</if>
+            <if test="frequentStore != null">frequent_store = #{frequentStore},</if>
+            <if test="storeType != null and storeType != ''">store_type = #{storeType},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="investmentBudget != null and investmentBudget != ''">investment_budget = #{investmentBudget},</if>
+            <if test="cooperationMode != null and cooperationMode != ''">cooperation_mode = #{cooperationMode},</if>
+            <if test="expectedStoreAddress != null">expected_store_address = #{expectedStoreAddress},</if>
+            <if test="expectedProvince != null">expected_province = #{expectedProvince},</if>
+            <if test="expectedCity != null">expected_city = #{expectedCity},</if>
+            <if test="expectedDistrict != null">expected_district = #{expectedDistrict},</if>
+            <if test="industry != null and industry != ''">industry = #{industry},</if>
+            <if test="developmentOpinion != null and developmentOpinion != ''">development_opinion = #{developmentOpinion},</if>
+            <if test="selectionReason != null and selectionReason != ''">selection_reason = #{selectionReason},</if>
+            <if test="improvementSuggestion != null">improvement_suggestion = #{improvementSuggestion},</if>
+            <if test="businessDistrict != null">business_district = #{businessDistrict},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFranchiseInvestmentFormById" parameterType="Integer">
+        delete from franchise_investment_form where id = #{id}
+    </delete>
+
+    <delete id="deleteFranchiseInvestmentFormByIds" parameterType="String">
+        delete from franchise_investment_form where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

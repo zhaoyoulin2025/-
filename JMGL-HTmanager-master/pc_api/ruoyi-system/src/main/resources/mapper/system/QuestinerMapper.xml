@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.QuestinerMapper">
+    
+    <resultMap type="Questiner" id="QuestinerResult">
+        <result property="id"    column="id"    />
+        <result property="clientId"    column="clientId"    />
+        <result property="sTime"    column="sTime"    />
+    </resultMap>
+
+    <sql id="selectQuestinerVo">
+        select id, clientId, sTime from questiner
+    </sql>
+
+    <select id="selectQuestinerList" parameterType="Questiner" resultMap="QuestinerResult">
+        <include refid="selectQuestinerVo"/>
+        <where>  
+            <if test="clientId != null "> and clientId = #{clientId}</if>
+            <if test="sTime != null "> and sTime = #{sTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectQuestinerById" parameterType="Long" resultMap="QuestinerResult">
+        <include refid="selectQuestinerVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertQuestiner" parameterType="Questiner" useGeneratedKeys="true" keyProperty="id">
+        insert into questiner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">clientId,</if>
+            <if test="sTime != null">sTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">#{clientId},</if>
+            <if test="sTime != null">#{sTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateQuestiner" parameterType="Questiner">
+        update questiner
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientId != null">clientId = #{clientId},</if>
+            <if test="sTime != null">sTime = #{sTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteQuestinerById" parameterType="Long">
+        delete from questiner where id = #{id}
+    </delete>
+
+    <delete id="deleteQuestinerByIds" parameterType="String">
+        delete from questiner where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

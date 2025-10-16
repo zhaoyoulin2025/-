@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ClientMapper">
+
+    <resultMap type="Client" id="ClientResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="userId"    column="userId"    />
+        <result property="clientLevel"    column="clientLevel"    />
+        <result property="clientStatus"    column="clientStatus"    />
+        <result property="guideId"    column="guideId"    />
+        <result property="guideName"    column="guideName"    />
+        <result property="sTime"    column="sTime"    />
+        <result property="upTime"    column="upTime"    />
+        <result property="groupNum"    column="groupNum"    />
+        <result property="likeCity"    column="likeCity"    />
+        <result property="budget"    column="budget"    />
+        <result property="isTransfor"    column="isTransfor"    />
+        <result property="plan"    column="plan"    />
+        <result property="otherProject"    column="otherProject"    />
+        <result property="single"    column="single"    />
+        <result property="ismore"    column="ismore"    />
+        <result property="firstTime"    column="firstTime"    />
+        <result property="dealTime"    column="dealTime"    />
+        <result property="comeTime"    column="comeTime"    />
+        <result property="nowHouse"    column="nowHouse"    />
+        <result property="oldHouse"    column="oldHouse"    />
+        <result property="province"    column="province"    />
+        <result property="residence"    column="residence"    />
+        <result property="businessCategory"    column="business_category"    />
+        <result property="frequentStore"    column="frequent_store"    />
+        <result property="storeType"    column="store_type"    />
+        <result property="investmentBudget"    column="investment_budget"    />
+        <result property="cooperationMode"    column="cooperation_mode"    />
+        <result property="expectedStoreAddress"    column="expected_store_address"    />
+        <result property="expectedProvince"    column="expected_province"    />
+        <result property="expectedCity"    column="expected_city"    />
+        <result property="expectedDistrict"    column="expected_district"    />
+        <result property="industry"    column="industry"    />
+        <result property="businessDistrict"    column="business_district"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="developmentOpinion"    column="development_opinion"    />
+        <result property="selectionReason"    column="selection_reason"    />
+        <result property="improvementSuggestion"    column="improvement_suggestion"    />
+        <result property="otherThink"    column="otherThink"    />
+        <result property="shopResource"    column="shopResource"    />
+    </resultMap>
+
+    <sql id="selectClientVo">
+        select id, name, phone, userId, clientLevel, clientStatus, guideId, sTime, upTime, groupNum, likeCity, budget, isTransfor, plan, otherProject, single, ismore, firstTime, dealTime, comeTime, nowHouse, oldHouse, otherThink,shopResource from client
+    </sql>
+
+    <select id="selectClientList" parameterType="Client" resultMap="ClientResult">
+        SELECT
+        a.id,
+        a.name,
+        a.phone,
+        a.userId,
+        a.clientLevel,
+        a.clientStatus,
+        a.guideId,
+        a.sTime,
+        a.upTime,
+        a.groupNum,
+        a.likeCity,
+        a.budget,
+        a.isTransfor,
+        a.plan,
+        a.otherProject,
+        a.single,
+        a.ismore,
+        a.firstTime,
+        a.dealTime,
+        a.comeTime,
+        a.nowHouse,
+        a.oldHouse,
+        a.otherThink,
+        b.nick_name AS guideName,
+        a.province,
+        a.residence,
+        a.business_category,
+        a.frequent_store,
+        a.store_type,
+        a.investment_budget,
+        a.cooperation_mode,
+        a.expected_store_address,
+        a.expected_province,
+         a.expected_city,
+         a.expected_district,
+         a.industry,
+         a.business_district,
+         a.remarks,
+         a.development_opinion,
+         a.selection_reason,
+         a.improvement_suggestion,
+        a.shopResource
+        FROM client a  <!-- 修改为小写表名 -->
+        LEFT JOIN sys_user b ON a.guideId = b.user_id
+        <where>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and a.phone like concat('%', #{phone}, '%')</if>
+            <if test="userId != null "> and a.userId = #{userId}</if>
+            <if test="clientLevel != null  and clientLevel != ''"> and a.clientLevel = #{clientLevel}</if>
+            <if test="clientStatus != null "> and a.clientStatus = #{clientStatus}</if>
+            <if test="guideId != null "> and a.guideId = #{guideId}</if>
+            <if test="sTime != null "> and a.sTime = #{sTime}</if>
+            <if test="upTime != null "> and a.upTime = #{upTime}</if>
+            <if test="groupNum != null  and groupNum != ''"> and a.groupNum like concat('%', #{groupNum}, '%')</if>
+            <if test="likeCity != null  and likeCity != ''"> and a.likeCity like concat('%', #{likeCity}, '%')</if>
+            <if test="budget != null  and budget != ''"> and a.budget like concat('%', #{budget}, '%')</if>
+            <if test="isTransfor != null "> and a.isTransfor like concat('%',#{isTransfor}, '%')</if>
+            <if test="plan != null  and plan != ''"> and a.plan like concat('%', #{plan}, '%')</if>
+            <if test="otherProject != null  and otherProject != ''"> and a.otherProject like concat('%', #{otherProject}, '%')</if>
+            <if test="single != null "> and a.single like concat('%', #{single}, '%')</if>
+            <if test="ismore != null "> and a.ismore like concat('%', #{ismore}, '%')</if>
+            <if test="firstTime != null "> and a.firstTime like concat('%', #{firstTime}, '%')</if>
+            <if test="dealTime != null "> and a.dealTime = #{dealTime}</if>
+            <if test="comeTime != null "> and a.comeTime = #{comeTime}</if>
+            <if test="nowHouse != null  and nowHouse != ''"> and a.nowHouse like concat('%', #{nowHouse}, '%')</if>
+            <if test="oldHouse != null  and oldHouse != ''"> and a.oldHouse like concat('%', #{oldHouse}, '%')</if>
+            <if test="otherThink != null  and otherThink != ''"> and a.otherThink like concat('%', #{otherThink}, '%')</if>
+        </where>
+        order by a.sTime desc
+    </select>
+
+    <select id="selectClientById" parameterType="Long" resultMap="ClientResult">
+        SELECT
+        a.id,
+        a.name,
+        a.phone,
+        a.userId,
+        a.clientLevel,
+        a.clientStatus,
+        a.guideId,
+        b.user_name as guideName,
+        a.sTime,
+        a.upTime,
+        a.groupNum,
+a.likeCity,
+a.budget,
+a.isTransfor,
+a.plan,
+a.otherProject,
+a.single,
+a.ismore,
+a.firstTime,
+a.dealTime,
+a.comeTime,
+a.nowHouse,
+a.oldHouse,
+a.otherThink,
+ b.nick_name AS guideName,
+ a.residence,
+        a.business_category,
+        a.frequent_store,
+        a.store_type,
+        a.investment_budget,
+        a.cooperation_mode,
+        a.expected_store_address,
+        a.expected_province,
+         a.expected_city,
+         a.expected_district,
+         a.industry,
+         a.business_district,
+         a.remarks,
+         a.development_opinion,
+         a.selection_reason,
+         a.improvement_suggestion,
+a.shopResource
+        FROM client a
+        LEFT JOIN sys_user b ON a.guideId = b.user_id
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertClient" parameterType="Client" useGeneratedKeys="true" keyProperty="id">
+        insert into client
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="userId != null">userId,</if>
+            <if test="clientLevel != null">clientLevel,</if>
+            <if test="clientStatus != null">clientStatus,</if>
+            <if test="guideId != null">guideId,</if>
+            <if test="sTime != null">sTime,</if>
+            <if test="upTime != null">upTime,</if>
+            <if test="groupNum != null">groupNum,</if>
+            <if test="likeCity != null">likeCity,</if>
+            <if test="budget != null">budget,</if>
+            <if test="isTransfor != null">isTransfor,</if>
+            <if test="plan != null">plan,</if>
+            <if test="otherProject != null">otherProject,</if>
+            <if test="single != null">single,</if>
+            <if test="ismore != null">ismore,</if>
+            <if test="firstTime != null">firstTime,</if>
+            <if test="dealTime != null">dealTime,</if>
+            <if test="comeTime != null">comeTime,</if>
+            <if test="nowHouse != null">nowHouse,</if>
+            <if test="oldHouse != null">oldHouse,</if>
+            <if test="otherThink != null">otherThink,</if>
+            <if test="shopResource != null">shopResource,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="clientLevel != null">#{clientLevel},</if>
+            <if test="clientStatus != null">#{clientStatus},</if>
+            <if test="guideId != null">#{guideId},</if>
+            <if test="sTime != null">#{sTime},</if>
+            <if test="upTime != null">#{upTime},</if>
+            <if test="groupNum != null">#{groupNum},</if>
+            <if test="likeCity != null">#{likeCity},</if>
+            <if test="budget != null">#{budget},</if>
+            <if test="isTransfor != null">#{isTransfor},</if>
+            <if test="plan != null">#{plan},</if>
+            <if test="otherProject != null">#{otherProject},</if>
+            <if test="single != null">#{single},</if>
+            <if test="ismore != null">#{ismore},</if>
+            <if test="firstTime != null">#{firstTime},</if>
+            <if test="dealTime != null">#{dealTime},</if>
+            <if test="comeTime != null">#{comeTime},</if>
+            <if test="nowHouse != null">#{nowHouse},</if>
+            <if test="oldHouse != null">#{oldHouse},</if>
+            <if test="otherThink != null">#{otherThink},</if>
+            <if test="shopResource != null">#{shopResource},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClient" parameterType="Client">
+        update client
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="userId != null">userId = #{userId},</if>
+            <if test="clientLevel != null">clientLevel = #{clientLevel},</if>
+            <if test="clientStatus != null">clientStatus = #{clientStatus},</if>
+            <if test="guideId != null">guideId = #{guideId},</if>
+            <if test="sTime != null">sTime = #{sTime},</if>
+            <if test="upTime != null">upTime = #{upTime},</if>
+            <if test="groupNum != null">groupNum = #{groupNum},</if>
+            <if test="likeCity != null">likeCity = #{likeCity},</if>
+            <if test="budget != null">budget = #{budget},</if>
+            <if test="isTransfor != null">isTransfor = #{isTransfor},</if>
+            <if test="plan != null">plan = #{plan},</if>
+            <if test="otherProject != null">otherProject = #{otherProject},</if>
+            <if test="single != null">single = #{single},</if>
+            <if test="ismore != null">ismore = #{ismore},</if>
+            <if test="firstTime != null">firstTime = #{firstTime},</if>
+            <if test="dealTime != null">dealTime = #{dealTime},</if>
+            <if test="comeTime != null">comeTime = #{comeTime},</if>
+            <if test="nowHouse != null">nowHouse = #{nowHouse},</if>
+            <if test="oldHouse != null">oldHouse = #{oldHouse},</if>
+            <if test="otherThink != null">otherThink = #{otherThink},</if>
+            <if test="shopResource != null">shopResource = #{shopResource},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteClientById" parameterType="Long">
+        delete from client where id = #{id}
+    </delete>
+
+    <delete id="deleteClientByIds" parameterType="String">
+        delete from client where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getCurrentMouthCountUser" resultType="map">
+        SELECT
+        COUNT(CASE
+        WHEN sTime >= DATE_FORMAT(NOW(), '%Y-%m-01')
+        AND sTime &lt; DATE_FORMAT(NOW() + INTERVAL 1 MONTH, '%Y-%m-01')
+        THEN 1 END) AS currentCount,
+
+        COUNT(CASE
+        WHEN sTime >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
+        AND sTime &lt; DATE_FORMAT(NOW(), '%Y-%m-01')
+        THEN 1 END) AS lastCount
+        FROM client where guideId = #{userId}
+    </select>
+
+    <select id="getCurrentMouthFollowCount" resultType="map">
+        SELECT
+        COUNT(CASE
+        WHEN a.sTime >= DATE_FORMAT(NOW(), '%Y-%m-01')
+        AND a.sTime &lt; DATE_FORMAT(NOW() + INTERVAL 1 MONTH, '%Y-%m-01')
+        THEN 1 END) AS currentCount,
+
+        COUNT(CASE
+        WHEN a.sTime >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
+        AND a.sTime &lt; DATE_FORMAT(NOW(), '%Y-%m-01')
+        THEN 1 END) AS lastCount
+        FROM client a
+        LEFT JOIN customer_follow_up b ON a.id = b.client_id
+        WHERE
+        a.guideId =  #{userId}
+        AND b.client_id IS NULL;
+    </select>
+</mapper>

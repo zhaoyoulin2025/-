@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DistrictfollowerMapper">
+    
+    <resultMap type="Districtfollower" id="DistrictfollowerResult">
+        <result property="id"    column="id"    />
+        <result property="districtId"    column="district_id"    />
+        <result property="followerId"    column="follower_id"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="creatorId"    column="creator_id"    />
+    </resultMap>
+
+    <sql id="selectDistrictfollowerVo">
+        select id, district_id, follower_id, created_at, updated_at, creator_id from districtfollower
+    </sql>
+
+    <select id="selectDistrictfollowerList" parameterType="Districtfollower" resultMap="DistrictfollowerResult">
+        <include refid="selectDistrictfollowerVo"/>
+        <where>  
+            <if test="districtId != null "> and district_id = #{districtId}</if>
+            <if test="followerId != null "> and follower_id = #{followerId}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+            <if test="creatorId != null "> and creator_id = #{creatorId}</if>
+        </where>
+    </select>
+    
+    <select id="selectDistrictfollowerById" parameterType="Long" resultMap="DistrictfollowerResult">
+        <include refid="selectDistrictfollowerVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDistrictfollower" parameterType="Districtfollower" useGeneratedKeys="true" keyProperty="id">
+        insert into districtfollower
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="districtId != null">district_id,</if>
+            <if test="followerId != null">follower_id,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="creatorId != null">creator_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="districtId != null">#{districtId},</if>
+            <if test="followerId != null">#{followerId},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDistrictfollower" parameterType="Districtfollower">
+        update districtfollower
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="districtId != null">district_id = #{districtId},</if>
+            <if test="followerId != null">follower_id = #{followerId},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="creatorId != null">creator_id = #{creatorId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDistrictfollowerById" parameterType="Long">
+        delete from districtfollower where id = #{id}
+    </delete>
+
+    <delete id="deleteDistrictfollowerByIds" parameterType="String">
+        delete from districtfollower where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

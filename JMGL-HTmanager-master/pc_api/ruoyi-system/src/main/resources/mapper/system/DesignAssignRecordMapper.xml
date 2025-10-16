@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruoyi.system.mapper.DesignAssignRecordMapper">
+
+    <resultMap type="com.ruoyi.system.domain.DesignAssignRecord" id="DesignAssignRecordResult">
+        <id     property="id"           column="id"           />
+        <result property="designId"     column="design_id"     />
+        <result property="designStage"  column="design_stage"  />
+        <result property="designerId"   column="designer_id"   />
+        <result property="assignTime"   column="assign_time"   />
+        <result property="updateTime"   column="update_time"   />
+    </resultMap>
+
+    <sql id="selectDesignAssignRecordVo">
+        select id, design_id, design_stage, designer_id, assign_time, update_time from design_assign_record
+    </sql>
+
+    <!-- 查询单个 -->
+    <select id="selectDesignAssignRecordById" parameterType="Long" resultMap="DesignAssignRecordResult">
+        <include refid="selectDesignAssignRecordVo" />
+        where id = #{id}
+    </select>
+
+    <!-- 查询列表 -->
+    <select id="selectDesignAssignRecordList" parameterType="com.ruoyi.system.domain.DesignAssignRecord" resultMap="DesignAssignRecordResult">
+        <include refid="selectDesignAssignRecordVo" />
+        <where>
+            <if test="designId != null">and design_id = #{designId}</if>
+            <if test="designStage != null">and design_stage = #{designStage}</if>
+            <if test="designerId != null">and designer_id = #{designerId}</if>
+            <if test="assignTime != null">and assign_time = #{assignTime}</if>
+            <if test="updateTime != null">and update_time = #{updateTime}</if>
+        </where>
+    </select>
+
+    <!-- 根据设计ID查询 -->
+    <select id="selectByDesignId" parameterType="Long" resultMap="DesignAssignRecordResult">
+        <include refid="selectDesignAssignRecordVo" />
+        where design_id = #{designId}
+        order by design_stage asc
+    </select>
+
+    <select id="getResponsibleStages" parameterType="Long" >
+        select design_stage
+        from design_assign_record  <!-- 缺少表名，需要补充 -->
+        where design_id = #{designId}
+        and designer_id = #{designerId}
+    </select>
+
+    <!-- 根据设计ID和阶段查询 -->
+    <select id="selectByDesignIdAndStage" parameterType="com.ruoyi.system.domain.DesignAssignRecord" resultMap="DesignAssignRecordResult">
+        <include refid="selectDesignAssignRecordVo" />
+        where design_id = #{designId}
+        and design_stage = #{designStage}
+    </select>
+
+    <!-- 新增 -->
+    <insert id="insertDesignAssignRecord" parameterType="com.ruoyi.system.domain.DesignAssignRecord">
+        insert into design_assign_record
+            (design_id, design_stage, designer_id, assign_time, update_time)
+        values
+            (#{designId}, #{designStage}, #{designerId}, sysdate(), sysdate())
+    </insert>
+
+    <!-- 批量新增 -->
+    <insert id="batchInsertDesignAssignRecord" parameterType="java.util.List">
+        insert into design_assign_record
+        (design_id, design_stage, designer_id, assign_time, update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.designId}, #{item.designStage}, #{item.designerId}, sysdate(), sysdate())
+        </foreach>
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateDesignAssignRecord" parameterType="com.ruoyi.system.domain.DesignAssignRecord">
+        update design_assign_record
+        <set>
+            <if test="designId != null">design_id = #{designId},</if>
+            <if test="designStage != null">design_stage = #{designStage},</if>
+            <if test="designerId != null">designer_id = #{designerId},</if>
+            <if test="assignTime != null">assign_time = #{assignTime},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 删除单个 -->
+    <delete id="deleteDesignAssignRecordById" parameterType="Long">
+        delete from design_assign_record where id = #{id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="deleteDesignAssignRecordByIds" parameterType="Long[]">
+        delete from design_assign_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

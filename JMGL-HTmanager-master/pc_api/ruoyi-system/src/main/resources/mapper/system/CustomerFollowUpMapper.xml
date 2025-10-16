@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CustomerFollowUpMapper">
+    
+    <resultMap type="CustomerFollowUp" id="CustomerFollowUpResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="nickName"    column="nickName"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="clientName"    column="clientName"    />
+        <result property="followUpTime"    column="follow_up_time"    />
+        <result property="followUpDescription"    column="follow_up_description"    />
+    </resultMap>
+
+    <sql id="selectCustomerFollowUpVo">
+        select id, user_id, client_id, follow_up_time, follow_up_description from customer_follow_up
+    </sql>
+
+    <select id="selectCustomerFollowUpList" parameterType="CustomerFollowUp" resultMap="CustomerFollowUpResult">
+        select a.id, a.user_id, a.client_id,c.nick_name as nickName,b.name as clientName, a.follow_up_time, a.follow_up_description
+        from customer_follow_up a LEFT JOIN client b ON a.client_id = b.id
+        LEFT JOIN sys_user c ON a.user_id = c.user_id
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="clientId != null  and clientId != ''"> and client_id = #{clientId}</if>
+            <if test="followUpTime != null "> and follow_up_time = #{followUpTime}</if>
+            <if test="followUpDescription != null  and followUpDescription != ''"> and follow_up_description = #{followUpDescription}</if>
+        </where>
+        order by a.follow_up_time desc
+    </select>
+
+    <select id="wxCustomerFollowList" parameterType="long" resultType="com.ruoyi.system.domain.CustomerFollowUp">
+        SELECT
+            a.follow_up_description,
+            a.follow_up_time,
+            b.nick_name as nickName
+        FROM
+            customer_follow_up a
+                LEFT JOIN sys_user b ON a.user_id = b.user_id
+        where a.client_id = #{clientId} and b.user_id = #{userId}
+    </select>
+    
+    <select id="selectCustomerFollowUpById" parameterType="Long" resultMap="CustomerFollowUpResult">
+        <include refid="selectCustomerFollowUpVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCustomerFollowUp" parameterType="CustomerFollowUp" useGeneratedKeys="true" keyProperty="id">
+        insert into customer_follow_up
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="clientId != null and clientId != ''">client_id,</if>
+            <if test="followUpTime != null">follow_up_time,</if>
+            <if test="followUpDescription != null">follow_up_description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="clientId != null and clientId != ''">#{clientId},</if>
+            <if test="followUpTime != null">#{followUpTime},</if>
+            <if test="followUpDescription != null">#{followUpDescription},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCustomerFollowUp" parameterType="CustomerFollowUp">
+        update customer_follow_up
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="clientId != null and clientId != ''">client_id = #{clientId},</if>
+            <if test="followUpTime != null">follow_up_time = #{followUpTime},</if>
+            <if test="followUpDescription != null">follow_up_description = #{followUpDescription},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCustomerFollowUpById" parameterType="Long">
+        delete from customer_follow_up where id = #{id}
+    </delete>
+
+    <delete id="deleteCustomerFollowUpByIds" parameterType="String">
+        delete from customer_follow_up where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

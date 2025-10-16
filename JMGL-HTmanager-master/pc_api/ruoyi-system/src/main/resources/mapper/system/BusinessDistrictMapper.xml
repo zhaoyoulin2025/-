@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BusinessDistrictMapper">
+
+    <resultMap type="BusinessDistrict" id="BusinessDistrictResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="address"    column="address"    />
+        <result property="region"    column="region"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="creatorId"    column="creator_id"    />
+        <result property="followerIds"    column="follower_ids"    />
+        <result property="followerName"    column="follower_names"    />
+        <result property="followerId"    column="followerId"    />
+        <result property="createrName"    column="createrName"    />
+        <result property="statues"    column="statues"    />
+        <result property="customerName"    column="client_name"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="remainingDays"    column="remainingDays"    />
+
+
+    </resultMap>
+
+    <sql id="selectBusinessDistrictVo">
+        select id, name, address, region, customer_id, created_at, updated_at, creator_id ,statues from business_district
+    </sql>
+
+    <select id="selectBusinessDistrictList" parameterType="BusinessDistrict" resultMap="BusinessDistrictResult">
+        SELECT
+            d.id,
+            d.NAME ,  -- 明确别名避免冲突
+            d.address,
+            d.region,
+            d.created_at,
+            d.updated_at,
+            d.creator_id,
+            d.statues,
+            d.customer_id,
+            b.name AS client_name,
+            x.nick_name as createrName,
+            (90 - DATEDIFF(CURDATE(), DATE(d.created_at))) AS remainingDays,
+            -- 客户名称
+            GROUP_CONCAT(u.nick_name SEPARATOR ',') AS follower_names,  -- 指定分隔符
+            GROUP_CONCAT(u.user_id SEPARATOR ',') AS follower_ids        -- 指定分隔符
+        FROM
+            business_district d
+                LEFT JOIN
+            districtfollower f ON d.id = f.district_id
+                LEFT JOIN
+            sys_user u ON f.follower_id = u.user_id
+                LEFT JOIN client b ON d.customer_id = b.id
+            LEFT JOIN     sys_user x on x.user_id = d.creator_id
+        <where>
+            <if test="name != null  and name != ''"> AND d.name LIKE CONCAT('%', #{name}, '%')</if>
+            <if test="address != null  and address != ''"> AND d.address = #{address}</if>
+            <if test="region != null  and region != ''"> AND d.region = #{region}</if>
+            <if test="customerId != null "> AND d.customer_id = #{customerId}</if>
+            <if test="createdAt != null "> AND d.created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> AND d.updated_at = #{updatedAt}</if>
+            <if test="creatorId != null "> AND d.creator_id = #{creatorId}</if>
+            <if test="followerId != null "> AND f.follower_id = #{followerId}</if>
+            <if test="statues != null "> AND d.statues = #{statues}</if>
+        </where>
+        GROUP BY
+            d.id, d.NAME, d.address, d.region, d.created_at, d.updated_at, d.creator_id, b.name  -- 明确所有非聚合列
+        ORDER BY
+            d.created_at DESC
+    </select>
+
+    <select id="selectBusinessDistrictById" parameterType="Long" resultMap="BusinessDistrictResult">
+        SELECT
+        d.id,
+        d.NAME ,  -- 明确别名避免冲突
+        d.address,
+        d.region,
+        d.created_at,
+        d.updated_at,
+        d.creator_id,
+        d.statues,
+        d.customer_id,
+        b.name AS client_name,    -- 客户名称
+        x.nick_name as createrName,
+        GROUP_CONCAT(u.nick_name SEPARATOR ',') AS follower_names,  -- 指定分隔符
+        GROUP_CONCAT(u.user_id SEPARATOR ',') AS follower_ids        -- 指定分隔符
+        FROM
+        business_district d
+        LEFT JOIN
+        districtfollower f ON d.id = f.district_id
+        LEFT JOIN
+        sys_user u ON f.follower_id = u.user_id
+        LEFT JOIN client b ON d.customer_id = b.id
+        LEFT JOIN     sys_user x on x.user_id = d.creator_id
+        <where>
+            d.id = #{id}
+        </where>
+        GROUP BY
+        d.id, d.NAME, d.address, d.region, d.created_at, d.updated_at, d.creator_id, b.name  -- 明确所有非聚合列
+        ORDER BY
+        d.created_at DESC
+    </select>
+
+    <insert id="insertBusinessDistrict" parameterType="BusinessDistrict" useGeneratedKeys="true" keyProperty="id">
+        insert into business_district
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="region != null and region != ''">region,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="statues != null">statues,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="region != null and region != ''">#{region},</if>
+            <if test="customerId != null">#{customerId},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="statues != null">#{statues},</if>
+
+         </trim>
+    </insert>
+
+    <update id="updateBusinessDistrict" parameterType="BusinessDistrict">
+        update business_district
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="region != null and region != ''">region = #{region},</if>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="creatorId != null">creator_id = #{creatorId},</if>
+            <if test="statues != null">statues = #{statues},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBusinessDistrictById" parameterType="Long">
+        delete from business_district where id = #{id}
+    </delete>
+
+    <delete id="deleteBusinessDistrictByIds" parameterType="String">
+        delete from business_district where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FileMapper">
+    
+    <resultMap type="File" id="FileResult">
+        <result property="id"    column="id"    />
+        <result property="fileItem"    column="fileItem"    />
+        <result property="itemId"    column="itemId"    />
+        <result property="isUse"    column="isUse"    />
+        <result property="desc"    column="desc"    />
+        <result property="url"    column="url"    />
+        <result property="sTime"    column="sTime"    />
+    </resultMap>
+
+    <sql id="selectFileVo">
+        select id, fileItem, itemId, isUse, desc, url, sTime from file
+    </sql>
+
+    <select id="selectFileList" parameterType="File" resultMap="FileResult">
+        <include refid="selectFileVo"/>
+        <where>  
+            <if test="fileItem != null  and fileItem != ''"> and fileItem = #{fileItem}</if>
+            <if test="itemId != null "> and itemId = #{itemId}</if>
+            <if test="isUse != null "> and isUse = #{isUse}</if>
+            <if test="desc != null  and desc != ''"> and desc = #{desc}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="sTime != null "> and sTime = #{sTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectFileById" parameterType="Long" resultMap="FileResult">
+        <include refid="selectFileVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertFile" parameterType="File" useGeneratedKeys="true" keyProperty="id">
+        insert into file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileItem != null and fileItem != ''">fileItem,</if>
+            <if test="itemId != null">itemId,</if>
+            <if test="isUse != null">isUse,</if>
+            <if test="desc != null">desc,</if>
+            <if test="url != null and url != ''">url,</if>
+            <if test="sTime != null">sTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileItem != null and fileItem != ''">#{fileItem},</if>
+            <if test="itemId != null">#{itemId},</if>
+            <if test="isUse != null">#{isUse},</if>
+            <if test="desc != null">#{desc},</if>
+            <if test="url != null and url != ''">#{url},</if>
+            <if test="sTime != null">#{sTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFile" parameterType="File">
+        update file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileItem != null and fileItem != ''">fileItem = #{fileItem},</if>
+            <if test="itemId != null">itemId = #{itemId},</if>
+            <if test="isUse != null">isUse = #{isUse},</if>
+            <if test="desc != null">desc = #{desc},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="sTime != null">sTime = #{sTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFileById" parameterType="Long">
+        delete from file where id = #{id}
+    </delete>
+
+    <delete id="deleteFileByIds" parameterType="String">
+        delete from file where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

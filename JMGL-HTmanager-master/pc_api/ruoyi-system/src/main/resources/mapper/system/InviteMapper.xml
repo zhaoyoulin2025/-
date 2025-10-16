@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.InviteMapper">
+
+    <resultMap type="Invite" id="InviteResult">
+        <result property="id"    column="id"    />
+        <result property="clientId"    column="clientId"    />
+        <result property="guideId"    column="guideId"    />
+        <result property="invitationTime"    column="invitationTime"    />
+        <result property="sTime"    column="sTime"    />
+        <result property="invitationDesc"    column="invitationDesc"    />
+        <result property="inviteStatus"    column="inviteStatus"    />
+        <result property="clientName"    column="clientName"    />
+        <result property="guideName"    column="guideName"    />
+        <result property="timeMoment"    column="time_moment"    />
+        <result property="invitePlace"    column="invitePlace"    />
+        <result property="phone"    column="phone"    />
+        <result property="confirmTime"    column="confirmTime"    />
+    </resultMap>
+
+    <sql id="selectInviteVo">
+        select id, clientId, guideId, invitationTime, sTime, invitationDesc, inviteStatus,guideName ,clientName,invitePlace from invite
+    </sql>
+
+    <select id="selectInviteList" parameterType="Invite" resultMap="InviteResult">
+        select a.id, a.clientId, a.guideId, a.invitationTime, a.sTime, a.invitationDesc, a.inviteStatus,a.time_moment,c.nick_name as guideName ,b.name as clientName,a.invitePlace as invitePlace,
+        c.phonenumber as phone,a.confirmTime as confirmTime
+        from invite a left join client b on a.clientId = b.id
+        LEFT JOIN sys_user c ON a.guideId = c.user_id
+        <where>
+            <if test="clientId != null "> and a.clientId = #{clientId}</if>
+            <if test="guideId != null "> and a.guideId = #{guideId}</if>
+            <if test="invitationTime != null "> and a.invitationTime = #{invitationTime}</if>
+            <if test="sTime != null "> and a.sTime = #{sTime}</if>
+            <if test="invitationDesc != null  and invitationDesc != ''"> and a.invitationDesc = #{invitationDesc}</if>
+            <if test="inviteStatus != null "> and a.inviteStatus = #{inviteStatus}</if>
+            <if test="guideName != null "> and a.guideName like concat('%', #{guideName}, '%')</if>
+            <if test="clientName != null "> and a.clientName like concat('%', #{clientName}, '%') </if>
+        </where>
+        order by a.invitationTime desc
+    </select>
+
+    <select id="selectInviteById" parameterType="Long" resultMap="InviteResult">
+        select a.id, a.clientId, a.guideId, a.invitationTime, a.sTime, a.invitationDesc, a.inviteStatus,a.time_moment,c.nick_name as guideName ,b.name as clientName,a.invitePlace as invitePlace
+        from invite a left join client b on a.clientId = b.id
+        LEFT JOIN sys_user c ON a.guideId = c.user_id
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertInvite" parameterType="Invite" useGeneratedKeys="true" keyProperty="id">
+        insert into invite
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">clientId,</if>
+            <if test="guideName != null">guideName,</if>
+            <if test="clientName != null">clientName,</if>
+            <if test="guideId != null">guideId,</if>
+            <if test="invitationTime != null">invitationTime,</if>
+            <if test="sTime != null">sTime,</if>
+            <if test="invitationDesc != null">invitationDesc,</if>
+            <if test="inviteStatus != null">inviteStatus,</if>
+            <if test="timeMoment != null">time_moment,</if>
+            <if test="invitePlace != null">invitePlace,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">#{clientId},</if>
+            <if test="guideName != null">#{guideName},</if>
+            <if test="clientName != null">#{clientName},</if>
+            <if test="guideId != null">#{guideId},</if>
+            <if test="invitationTime != null">#{invitationTime},</if>
+            <if test="sTime != null">#{sTime},</if>
+            <if test="invitationDesc != null">#{invitationDesc},</if>
+            <if test="inviteStatus != null">#{inviteStatus},</if>
+            <if test="timeMoment != null">#{timeMoment},</if>
+            <if test="invitePlace != null">#{invitePlace},</if>
+         </trim>
+    </insert>
+
+    <update id="updateInvite" parameterType="Invite">
+        update invite
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientId != null">clientId = #{clientId},</if>
+            <if test="guideName != null">guideName = #{guideName},</if>
+            <if test="clientName != null">clientName = #{clientName},</if>
+            <if test="guideId != null">guideId = #{guideId},</if>
+            <if test="invitationTime != null">invitationTime = #{invitationTime},</if>
+            <if test="sTime != null">sTime = #{sTime},</if>
+            <if test="invitationDesc != null">invitationDesc = #{invitationDesc},</if>
+            <if test="inviteStatus != null">inviteStatus = #{inviteStatus},</if>
+            <if test="invitePlace != null">invitePlace = #{invitePlace},</if>
+            <if test="timeMoment != null">time_moment = #{timeMoment},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteInviteById" parameterType="Long">
+        delete from invite where id = #{id}
+    </delete>
+
+    <delete id="deleteInviteByIds" parameterType="String">
+        delete from invite where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="inviteQueryByDatePc" parameterType="string" resultType="string">
+        SELECT i1.time_moment
+        FROM invite i1
+                 JOIN (
+            SELECT time_moment, MAX(id) AS max_value
+            FROM invite
+            WHERE invitationTime = #{dateStr}
+            GROUP BY time_moment
+        ) i2 ON i1.time_moment = i2.time_moment AND i1.id = i2.max_value
+        WHERE i1.invitationTime = #{dateStr} and inviteStatus != 2;
+    </select>
+</mapper>

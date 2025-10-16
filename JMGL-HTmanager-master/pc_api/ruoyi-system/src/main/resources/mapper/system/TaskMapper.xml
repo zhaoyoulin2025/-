@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TaskMapper">
+    
+    <resultMap type="Task" id="TaskResult">
+        <result property="id"    column="id"    />
+        <result property="clientId"    column="clientId"    />
+        <result property="shopId"    column="shopId"    />
+        <result property="taskStatus"    column="taskStatus"    />
+        <result property="sTime"    column="sTime"    />
+        <result property="upTime"    column="upTime"    />
+    </resultMap>
+
+    <sql id="selectTaskVo">
+        select id, clientId, shopId, taskStatus, sTime, upTime from task
+    </sql>
+
+    <select id="selectTaskList" parameterType="Task" resultMap="TaskResult">
+        <include refid="selectTaskVo"/>
+        <where>  
+            <if test="clientId != null "> and clientId = #{clientId}</if>
+            <if test="shopId != null "> and shopId = #{shopId}</if>
+            <if test="taskStatus != null "> and taskStatus = #{taskStatus}</if>
+            <if test="sTime != null "> and sTime = #{sTime}</if>
+            <if test="upTime != null "> and upTime = #{upTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaskById" parameterType="Long" resultMap="TaskResult">
+        <include refid="selectTaskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTask" parameterType="Task" useGeneratedKeys="true" keyProperty="id">
+        insert into task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">clientId,</if>
+            <if test="shopId != null">shopId,</if>
+            <if test="taskStatus != null">taskStatus,</if>
+            <if test="sTime != null">sTime,</if>
+            <if test="upTime != null">upTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">#{clientId},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="taskStatus != null">#{taskStatus},</if>
+            <if test="sTime != null">#{sTime},</if>
+            <if test="upTime != null">#{upTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTask" parameterType="Task">
+        update task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientId != null">clientId = #{clientId},</if>
+            <if test="shopId != null">shopId = #{shopId},</if>
+            <if test="taskStatus != null">taskStatus = #{taskStatus},</if>
+            <if test="sTime != null">sTime = #{sTime},</if>
+            <if test="upTime != null">upTime = #{upTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTaskById" parameterType="Long">
+        delete from task where id = #{id}
+    </delete>
+
+    <delete id="deleteTaskByIds" parameterType="String">
+        delete from task where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

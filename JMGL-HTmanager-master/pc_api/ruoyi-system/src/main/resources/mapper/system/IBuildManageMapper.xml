@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IBuildManageMapper">
+    
+    <resultMap type="BuildManage" id="BuildManageResult">
+        <result property="id"    column="id"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="project"    column="project"    />
+        <result property="quality"    column="quality"    />
+        <result property="question"    column="question"    />
+        <result property="suggestion"    column="suggestion"    />
+        <result property="img"    column="img"    />
+        <result property="shopId"    column="shop_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="progress"    column="progress"    />
+        <result property="shopName"    column="shopName"    />
+        <result property="superviserName"    column="superviserName"    />
+    </resultMap>
+
+    <sql id="selectBuildManageVo">
+        select id, create_date, project, quality, question, suggestion, img, shop_id, user_id, progress from build_manage
+    </sql>
+
+    <select id="selectBuildManageList" parameterType="BuildManage" resultMap="BuildManageResult">
+        <include refid="selectBuildManageVo"/>
+        <where>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+            <if test="project != null  and project != ''"> and project = #{project}</if>
+            <if test="quality != null  and quality != ''"> and quality = #{quality}</if>
+            <if test="question != null  and question != ''"> and question = #{question}</if>
+            <if test="suggestion != null  and suggestion != ''"> and suggestion = #{suggestion}</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="shopId != null "> and shop_id = #{shopId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="progress != null "> and progress = #{progress}</if>
+        </where>
+    </select>
+
+    <select id="selectBuildManageListByshop" parameterType="BuildManage" resultMap="BuildManageResult">
+        SELECT
+            a.id,
+            a.create_date,
+            a.project,
+            a.quality,
+            a.question,
+            a.suggestion,
+            a.img,
+            a.shop_id,
+            a.user_id,
+            a.progress ,
+            c.name as shopName,
+            b.nick_name as superviserName
+        FROM
+            build_manage a
+                LEFT JOIN sys_user b ON b.user_id = a.user_id
+                left join shop c on c.id = a.shop_id
+        where a.shop_id = #{shopId}
+    </select>
+    
+    <select id="selectBuildManageById" parameterType="Integer" resultMap="BuildManageResult">
+        <include refid="selectBuildManageVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBuildManage" parameterType="BuildManage" useGeneratedKeys="true" keyProperty="id">
+        insert into build_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createDate != null">create_date,</if>
+            <if test="project != null">project,</if>
+            <if test="quality != null">quality,</if>
+            <if test="question != null">question,</if>
+            <if test="suggestion != null">suggestion,</if>
+            <if test="img != null">img,</if>
+            <if test="shopId != null">shop_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="progress != null">progress,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createDate != null">#{createDate},</if>
+            <if test="project != null">#{project},</if>
+            <if test="quality != null">#{quality},</if>
+            <if test="question != null">#{question},</if>
+            <if test="suggestion != null">#{suggestion},</if>
+            <if test="img != null">#{img},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="progress != null">#{progress},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBuildManage" parameterType="BuildManage">
+        update build_manage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="project != null">project = #{project},</if>
+            <if test="quality != null">quality = #{quality},</if>
+            <if test="question != null">question = #{question},</if>
+            <if test="suggestion != null">suggestion = #{suggestion},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="shopId != null">shop_id = #{shopId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="progress != null">progress = #{progress},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBuildManageById" parameterType="Integer">
+        delete from build_manage where id = #{id}
+    </delete>
+
+    <delete id="deleteBuildManageByIds" parameterType="String">
+        delete from build_manage where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

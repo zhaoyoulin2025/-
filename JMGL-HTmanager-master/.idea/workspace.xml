@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="65f0488b-3d4a-42f0-97eb-dc29c7ee7978" name="Default Changelist" comment="营建管理可以查看监理报告以及 报表">
+      <change afterPath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/mapper/DesignFlowDetailMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/domain/BusinessDistrict.java" beforeDir="false" afterPath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/domain/BusinessDistrict.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/domain/Design.java" beforeDir="false" afterPath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/domain/Design.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/domain/Shop.java" beforeDir="false" afterPath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/domain/Shop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/BusinessDistrictServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/BusinessDistrictServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DesignServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DesignServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/ShopServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/ShopServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/resources/mapper/system/DesignFlowDetailMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/resources/mapper/system/DesignFlowDetailMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/resources/mapper/system/DesignMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pc_api/ruoyi-system/src/main/resources/mapper/system/DesignMapper.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="D:/DevTools/apache-maven-3.8.2" />
+        <option name="useMavenConfig" value="true" />
+        <option name="userSettingsFile" value="D:\DevTools\apache-maven-3.8.2\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2xiOdkdCNGEbsoVNMybvB7bexjP" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Administrator/IdeaProjects/JMGL-HTmanager/pc_api/ruoyi-system/src/main/resources/mapper/system&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;8eebd27f751dbcd57e8e7ed58b4b4bc6&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Administrator\IdeaProjects\JMGL-HTmanager\pc_api\ruoyi-system\src\main\resources\mapper\system" />
+      <recent name="C:\Users\Administrator\IdeaProjects\JMGL-HTmanager\pc_api\ruoyi-system\src\main\java\com\ruoyi\system\mapper" />
+      <recent name="C:\Users\Administrator\IdeaProjects\JMGL-HTmanager\pc_api\ruoyi-system\src\main\java\com\ruoyi\system\service\impl" />
+      <recent name="C:\Users\Administrator\IdeaProjects\JMGL-HTmanager\pc_api\ruoyi-system\src\main\java\com\ruoyi\system\service" />
+      <recent name="C:\Users\Administrator\IdeaProjects\JMGL-HTmanager\pc_api\ruoyi-admin\src\main\java\com\ruoyi\web\controller\common" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="RuoYiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="ruoyi-admin" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ruoyi.RuoYiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="65f0488b-3d4a-42f0-97eb-dc29c7ee7978" name="Default Changelist" comment="" />
+      <created>1748417516893</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1748417516893</updated>
+      <workItem from="1748417518055" duration="33000" />
+      <workItem from="1754803580738" duration="6033000" />
+      <workItem from="1755178534130" duration="10237000" />
+      <workItem from="1756520405947" duration="2829000" />
+      <workItem from="1757744020824" duration="10212000" />
+      <workItem from="1757942075015" duration="6444000" />
+      <workItem from="1758031233940" duration="2929000" />
+      <workItem from="1758108903258" duration="5474000" />
+      <workItem from="1758433342228" duration="2343000" />
+      <workItem from="1758438860339" duration="14776000" />
+    </task>
+    <task id="LOCAL-00001" summary="营建管理细化">
+      <created>1754811820081</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1754811820081</updated>
+    </task>
+    <task id="LOCAL-00002" summary="营建管理可以查看监理报告以及 报表">
+      <created>1755277040782</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1755277040782</updated>
+    </task>
+    <task id="LOCAL-00003" summary="营建管理可以查看监理报告以及 报表">
+      <created>1755425612339</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1755425612339</updated>
+    </task>
+    <task id="LOCAL-00004" summary="营建管理可以查看监理报告以及 报表">
+      <created>1757752339590</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1757752339590</updated>
+    </task>
+    <task id="LOCAL-00005" summary="营建管理可以查看监理报告以及 报表">
+      <created>1757948567634</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1757948567634</updated>
+    </task>
+    <task id="LOCAL-00006" summary="营建管理可以查看监理报告以及 报表">
+      <created>1758036164628</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1758036164628</updated>
+    </task>
+    <task id="LOCAL-00007" summary="营建管理可以查看监理报告以及 报表">
+      <created>1758116192681</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1758116192681</updated>
+    </task>
+    <task id="LOCAL-00008" summary="营建管理可以查看监理报告以及 报表">
+      <created>1758450026593</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1758450026593</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="营建管理细化" />
+    <MESSAGE value="营建管理可以查看监理报告以及 报表" />
+    <option name="LAST_COMMIT_MESSAGE" value="营建管理可以查看监理报告以及 报表" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/pc_api/ruoyi-admin/src/main/java/com/ruoyi/web/controller/common/ClientController.java</url>
+          <line>78</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

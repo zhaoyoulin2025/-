@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BuildMapper">
+
+    <resultMap type="Build" id="BuildResult">
+        <result property="id"    column="id"    />
+        <result property="periodId"    column="periodId"    />
+        <result property="superviserId"    column="superviserId"    />
+        <result property="followerId"    column="followerId"    />
+        <result property="shopId"    column="shopId"    />
+        <result property="clientId"    column="clientId"    />
+        <result property="sTime"    column="sTime"    />
+        <result property="upTime"    column="upTime"    />
+        <result property="superviseStatus"    column="superviseStatus"    />
+        <result property="clientName"    column="clientName"    />
+        <result property="followerName"    column="followerName"    />
+        <result property="superviserName"    column="superviserName"    />
+        <result property="shopName"    column="shopName"    />
+        <result property="fileUrl"    column="fileUrl"    />
+    </resultMap>
+
+    <sql id="selectBuildVo">
+        select id,periodId, superviserId, followerId, shopId, clientId, sTime, upTime, superviseStatus, fileUrl from build
+    </sql>
+
+    <select id="selectBuildList" parameterType="Build" resultMap="BuildResult">
+        SELECT a.*, b.name AS clientName,e.user_name AS followerName , d.name AS shopName ,c.user_name AS superviserName FROM build a
+        LEFT JOIN client b
+        ON a.clientId = b.id
+        LEFT JOIN sys_user c
+        ON c.user_id = a.superviserId
+        LEFT JOIN shop d
+        ON a.shopId = d.id
+        LEFT JOIN sys_user e
+        ON e.user_id = a.followerId
+        <where>
+            <if test="superviserId != null "> and a.superviserId = #{superviserId}</if>
+            <if test="followerId != null "> and a.followerId = #{followerId}</if>
+            <if test="shopId != null "> and a.shopId = #{shopId}</if>
+            <if test="periodId != null "> and a.periodId = #{periodId}</if>
+            <if test="clientId != null "> and a.clientId = #{clientId}</if>
+            <if test="sTime != null "> and a.sTime = #{sTime}</if>
+            <if test="upTime != null "> and a.upTime = #{upTime}</if>
+            <if test="superviseStatus != null "> and a.superviseStatus = #{superviseStatus}</if>
+        </where>
+    </select>
+
+    <select id="selectBuildById" parameterType="Long" resultMap="BuildResult">
+        SELECT a.*, b.name AS clientName,e.user_name AS followerName , d.name AS shopName ,c.user_name AS superviserName FROM build a
+                                                                                                                                  LEFT JOIN client b
+                                                                                                                                            ON a.clientId = b.id
+                                                                                                                                  LEFT JOIN sys_user c
+                                                                                                                                            ON c.user_id = a.superviserId
+                                                                                                                                  LEFT JOIN shop d
+                                                                                                                                            ON a.shopId = d.id
+                                                                                                                                  LEFT JOIN sys_user e
+                                                                                                                                            ON e.user_id = a.followerId
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertBuild" parameterType="Build" useGeneratedKeys="true" keyProperty="id">
+        insert into build
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileUrl != null">fileUrl,</if>
+            <if test="superviserId != null">superviserId,</if>
+            <if test="periodId != null">periodId,</if>
+            <if test="followerId != null">followerId,</if>
+            <if test="shopId != null">shopId,</if>
+            <if test="clientId != null">clientId,</if>
+            <if test="sTime != null">sTime,</if>
+            <if test="upTime != null">upTime,</if>
+            <if test="superviseStatus != null">superviseStatus,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileUrl != null">#{fileUrl},</if>
+            <if test="superviserId != null">#{superviserId},</if>
+            <if test="periodId != null">#{periodId},</if>
+            <if test="followerId != null">#{followerId},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="sTime != null">#{sTime},</if>
+            <if test="upTime != null">#{upTime},</if>
+            <if test="superviseStatus != null">#{superviseStatus},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBuild" parameterType="Build">
+        update build
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileUrl != null">fileUrl = #{fileUrl},</if>
+            <if test="superviserId != null">superviserId = #{superviserId},</if>
+            <if test="periodId != null">periodId = #{periodId},</if>
+            <if test="followerId != null">followerId = #{followerId},</if>
+            <if test="shopId != null">shopId = #{shopId},</if>
+            <if test="clientId != null">clientId = #{clientId},</if>
+            <if test="sTime != null">sTime = #{sTime},</if>
+            <if test="upTime != null">upTime = #{upTime},</if>
+            <if test="superviseStatus != null">superviseStatus = #{superviseStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBuildById" parameterType="Long">
+        delete from build where id = #{id}
+    </delete>
+
+    <delete id="deleteBuildByIds" parameterType="String">
+        delete from build where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="wxBuildList" resultType="com.ruoyi.system.domain.vo.WxBuildListVO">
+        SELECT
+            a.shopId as shopId,
+            b.`name` as shopName,
+            b.address as shopAddress,
+            CONCAT(ROUND((5 - (SELECT COUNT(0) FROM build dd WHERE dd.shopId = b.id AND dd.superviseStatus = '0')) / 5 * 100,0), '%') AS rate
+        FROM
+            build a
+                LEFT JOIN shop b ON a.shopId = b.id
+        WHERE
+            a.superviserId = #{userId} GROUP BY a.shopId
+    </select>
+
+    <select id="getCurrentMouthBuildCount" resultType="map">
+        SELECT
+        COUNT(CASE
+        WHEN sTime >= DATE_FORMAT(NOW(), '%Y-%m-01')
+        AND sTime &lt; DATE_FORMAT(NOW() + INTERVAL 1 MONTH, '%Y-%m-01')
+        THEN 1 END) AS currentCount,
+
+        COUNT(CASE
+        WHEN sTime >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
+        AND sTime &lt; DATE_FORMAT(NOW(), '%Y-%m-01')
+        THEN 1 END) AS lastCount
+        FROM build where superviserId = #{userId}
+    </select>
+
+    <select id="getCurrentMouthBuildDownCount" resultType="map">
+        SELECT
+            COUNT(CASE
+                      WHEN sTime >= DATE_FORMAT(NOW(), '%Y-%m-01')
+                          AND sTime &lt; DATE_FORMAT(NOW() + INTERVAL 1 MONTH, '%Y-%m-01')
+                          THEN 1 END) AS currentCount,
+
+            COUNT(CASE
+                      WHEN sTime >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
+                          AND sTime &lt; DATE_FORMAT(NOW(), '%Y-%m-01')
+                          THEN 1 END) AS lastCount
+        FROM build where superviserId = #{userId} and periodId = 5 and superviseStatus =2
+    </select>
+</mapper>

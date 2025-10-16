@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ShopMapper">
+
+    <resultMap type="Shop" id="ShopResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="area" column="area"/>
+        <result property="regionId" column="regionId"/>
+        <result property="rent" column="rent"/>
+        <result property="shopDesc" column="shopDesc"/>
+        <result property="surroundDesc" column="surroundDesc"/>
+        <result property="trafficDesc" column="trafficDesc"/>
+        <result property="imgUrl" column="imgUrl"/>
+        <result property="videoUrl" column="videoUrl"/>
+        <result property="shopStatus" column="shopStatus"/>
+        <result property="sTime" column="sTime"/>
+        <result property="upTime" column="upTime"/>
+        <result property="owner" column="owner"/>
+        <result property="follower" column="follower"/>
+        <result property="clientId" column="clientId"/>
+        <result property="pdfUrl" column="pdfUrl"/>
+        <result property="shopSize" column="shopSize"/>
+        <result property="dongxian" column="dongxian"/>
+        <result property="huxing" column="huxing"/>
+        <result property="menkuan" column="menkuan"/>
+        <result property="waibai" column="waibai"/>
+        <result property="nianxian" column="nianxian"/>
+        <result property="dizneg" column="dizneg"/>
+        <result property="norent" column="norent"/>
+        <result property="dian" column="dian"/>
+        <result property="shui" column="shui"/>
+        <result property="yajin" column="yajin"/>
+        <result property="runStatus" column="runStatus"/>
+        <result property="zhuanrangfei" column="zhuanrangfei"/>
+        <result property="acondition" column="acondition"/>
+        <result property="guanggao" column="guanggao"/>
+        <result property="allDesc" column="allDesc"/>
+        <result property="clientName" column="clientName"/>
+        <result property="inValiday" column="inValiday"/>
+        <result property="followerName" column="followerName"/>
+        <result property="rentStatus" column="rentStatus"/>
+        <result property="districtId" column="districtId"/>
+        <result property="districtName" column="districtName"/>
+        <result property="rate" column="rate"/>
+    </resultMap>
+
+    <sql id="selectShopVo">
+        select id, name, address, area, regionId, rent, shopDesc, surroundDesc,runStatus, trafficDesc, imgUrl, videoUrl, shopStatus, sTime, upTime, owner, follower, clientId, pdfUrl, shopSize, dongxian, huxing, menkuan, waibai, nianxian, dizneg, norent, dian, shui, yajin, zhuanrangfei, acondition, guanggao, allDesc from shop
+    </sql>
+
+    <select id="selectShopList" parameterType="Shop" resultMap="ShopResult">
+        select b.id, b.name, b.address, b.area, b.regionId,b.rent,b.runStatus, b.shopDesc, b.surroundDesc, b.trafficDesc, b.imgUrl,
+        b.videoUrl, b.shopStatus, b.sTime, b.upTime, b.owner, b.follower, b.clientId, b.pdfUrl, b.shopSize, b.dongxian,b.districtId,
+        b.huxing, b.menkuan, b.waibai, b.nianxian, b.dizneg, b.norent, b.dian, b.shui, b.yajin, b.zhuanrangfei,
+        b.acondition, b.guanggao, b.allDesc,a.nick_name as followerName,c.`name` as clientName ,(60 - DATEDIFF(b.upTime, CURDATE())) AS inValiday,
+        CONCAT(ROUND((5 - (SELECT COUNT(0) FROM build dd WHERE dd.shopId = b.id AND dd.superviseStatus = '0')) / 5 * 100,0), '%') AS rate,
+        CASE
+        WHEN b.follower IS NULL THEN '未出租'
+        ELSE '已出租'
+        END AS rentStatus,
+        d.name as districtName
+        from shop b left join
+        sys_user a on b.follower = a.user_id
+        left join client c on b.clientId = c.id
+        left join business_district d on d.id = b.districtId
+        <where>
+
+            <if test="name != null  and name != ''">and b.name like concat('%', #{name}, '%')</if>
+            <if test="address != null  and address != ''">and b.address = #{address}</if>
+            <if test="runStatus != null  and runStatus != ''">and b.runStatus = #{runStatus}</if>
+            <if test="area != null  and area != ''">and b.area = #{area}</if>
+            <if test="regionId != null ">and b.regionId = #{regionId}</if>
+            <if test="rent != null ">and b.rent = #{rent}</if>
+            <if test="shopDesc != null  and shopDesc != ''">and b.shopDesc = #{shopDesc}</if>
+            <if test="surroundDesc != null  and surroundDesc != ''">and b.surroundDesc = #{surroundDesc}</if>
+            <if test="trafficDesc != null  and trafficDesc != ''">and b.trafficDesc = #{trafficDesc}</if>
+            <if test="imgUrl != null  and imgUrl != ''">and b.imgUrl = #{imgUrl}</if>
+            <if test="videoUrl != null  and videoUrl != ''">and b.videoUrl = #{videoUrl}</if>
+            <if test="shopStatus != null ">and b.shopStatus = #{shopStatus}</if>
+            <if test="sTime != null ">and b.sTime = #{sTime}</if>
+            <if test="upTime != null ">and b.upTime = #{upTime}</if>
+            <if test="owner != null  and owner != ''">and b.owner = #{owner}</if>
+            <if test="follower != null  and follower != ''">and b.follower = #{follower}</if>
+            <if test="clientId != null ">and b.clientId = #{clientId}</if>
+            <if test="pdfUrl != null  and pdfUrl != ''">and b.pdfUrl = #{pdfUrl}</if>
+            <if test="shopSize != null  and shopSize != ''">and b.shopSize = #{shopSize}</if>
+            <if test="dongxian != null  and dongxian != ''">and b.dongxian = #{dongxian}</if>
+            <if test="huxing != null  and huxing != ''">and b.huxing = #{huxing}</if>
+            <if test="menkuan != null  and menkuan != ''">and b.menkuan = #{menkuan}</if>
+            <if test="waibai != null  and waibai != ''">and b.waibai = #{waibai}</if>
+            <if test="nianxian != null  and nianxian != ''">and b.nianxian = #{nianxian}</if>
+            <if test="dizneg != null  and dizneg != ''">and b.dizneg = #{dizneg}</if>
+            <if test="norent != null  and norent != ''">and b.norent = #{norent}</if>
+            <if test="dian != null  and dian != ''">and b.dian = #{dian}</if>
+            <if test="shui != null  and shui != ''">and b.shui = #{shui}</if>
+            <if test="yajin != null  and yajin != ''">and b.yajin = #{yajin}</if>
+            <if test="zhuanrangfei != null  and zhuanrangfei != ''">and b.zhuanrangfei = #{zhuanrangfei}</if>
+            <if test="districtId != null  and districtId != ''">and b.districtId = #{districtId}</if>
+            <if test="acondition != null  and acondition != ''">and b.acondition = #{acondition}</if>
+            <if test="guanggao != null  and guanggao != ''">and b.guanggao = #{guanggao}</if>
+            <if test="allDesc != null  and allDesc != ''">and b.allDesc = #{allDesc}</if>
+        </where>
+        order by b.sTime desc
+    </select>
+
+    <select id="selectShopById" parameterType="Long" resultMap="ShopResult">
+        select b.id, b.name, b.address, b.area, b.regionId,b.rent, b.shopDesc, b.surroundDesc, b.trafficDesc, b.imgUrl,
+        b.videoUrl, b.shopStatus, b.sTime, b.upTime, b.owner, b.follower, b.clientId, b.pdfUrl, b.shopSize, b.dongxian,b.districtId,
+        b.huxing, b.menkuan, b.waibai, b.nianxian, b.dizneg, b.norent, b.dian,b.runStatus, b.shui, b.yajin, b.zhuanrangfei,
+        b.acondition, b.guanggao, b.allDesc,a.nick_name as followerName,c.`name` as clientName ,
+        (60 - DATEDIFF(b.upTime, CURDATE())) AS inValiday  ,
+               CASE
+                   WHEN b.follower IS NULL THEN '未出租'
+                   ELSE '已出租'
+                   END AS rentStatus ,
+        d.name as districtName from shop b
+        left join sys_user a on b.follower = a.user_id
+        left join client c on b.clientId = c.id
+        left join business_district d on d.id = b.districtId
+        where b.id = #{id}
+    </select>
+
+    <insert id="insertShop" parameterType="Shop" useGeneratedKeys="true" keyProperty="id">
+        insert into shop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="runStatus != null and runStatus != ''">runStatus,</if>
+            <if test="address != null">address,</if>
+            <if test="area != null">area,</if>
+            <if test="regionId != null">regionId,</if>
+            <if test="rent != null">rent,</if>
+            <if test="shopDesc != null">shopDesc,</if>
+            <if test="surroundDesc != null">surroundDesc,</if>
+            <if test="trafficDesc != null">trafficDesc,</if>
+            <if test="imgUrl != null">imgUrl,</if>
+            <if test="videoUrl != null">videoUrl,</if>
+            <if test="shopStatus != null">shopStatus,</if>
+            <if test="sTime != null">sTime,</if>
+            <if test="upTime != null">upTime,</if>
+            <if test="owner != null and owner != ''">owner,</if>
+            <if test="follower != null">follower,</if>
+            <if test="clientId != null">clientId,</if>
+            <if test="pdfUrl != null">pdfUrl,</if>
+            <if test="shopSize != null">shopSize,</if>
+            <if test="dongxian != null">dongxian,</if>
+            <if test="huxing != null">huxing,</if>
+            <if test="menkuan != null">menkuan,</if>
+            <if test="waibai != null">waibai,</if>
+            <if test="nianxian != null">nianxian,</if>
+            <if test="dizneg != null">dizneg,</if>
+            <if test="norent != null">norent,</if>
+            <if test="dian != null">dian,</if>
+            <if test="shui != null">shui,</if>
+            <if test="yajin != null">yajin,</if>
+            <if test="zhuanrangfei != null">zhuanrangfei,</if>
+            <if test="acondition != null">acondition,</if>
+            <if test="guanggao != null">guanggao,</if>
+            <if test="allDesc != null">allDesc,</if>
+            <if test="districtId != null  and districtId != ''">districtId</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="runStatus != null and runStatus != ''">#{runStatus},</if>
+            <if test="address != null">#{address},</if>
+            <if test="area != null">#{area},</if>
+            <if test="regionId != null">#{regionId},</if>
+            <if test="rent != null">#{rent},</if>
+            <if test="shopDesc != null">#{shopDesc},</if>
+            <if test="surroundDesc != null">#{surroundDesc},</if>
+            <if test="trafficDesc != null">#{trafficDesc},</if>
+            <if test="imgUrl != null">#{imgUrl},</if>
+            <if test="videoUrl != null">#{videoUrl},</if>
+            <if test="shopStatus != null">#{shopStatus},</if>
+            <if test="sTime != null">#{sTime},</if>
+            <if test="upTime != null">#{upTime},</if>
+            <if test="owner != null and owner != ''">#{owner},</if>
+            <if test="follower != null">#{follower},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="pdfUrl != null">#{pdfUrl},</if>
+            <if test="shopSize != null">#{shopSize},</if>
+            <if test="dongxian != null">#{dongxian},</if>
+            <if test="huxing != null">#{huxing},</if>
+            <if test="menkuan != null">#{menkuan},</if>
+            <if test="waibai != null">#{waibai},</if>
+            <if test="nianxian != null">#{nianxian},</if>
+            <if test="dizneg != null">#{dizneg},</if>
+            <if test="norent != null">#{norent},</if>
+            <if test="dian != null">#{dian},</if>
+            <if test="shui != null">#{shui},</if>
+            <if test="yajin != null">#{yajin},</if>
+            <if test="zhuanrangfei != null">#{zhuanrangfei},</if>
+            <if test="acondition != null">#{acondition},</if>
+            <if test="guanggao != null">#{guanggao},</if>
+            <if test="allDesc != null">#{allDesc},</if>
+            <if test="districtId != null  and districtId != ''">#{districtId}</if>
+        </trim>
+    </insert>
+
+    <update id="updateShop" parameterType="Shop">
+        update shop
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="runStatus != null and name != ''">runStatus = #{runStatus},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="regionId != null">regionId = #{regionId},</if>
+            <if test="rent != null">rent = #{rent},</if>
+            <if test="shopDesc != null">shopDesc = #{shopDesc},</if>
+            <if test="surroundDesc != null">surroundDesc = #{surroundDesc},</if>
+            <if test="trafficDesc != null">trafficDesc = #{trafficDesc},</if>
+            <if test="imgUrl != null">imgUrl = #{imgUrl},</if>
+            <if test="videoUrl != null">videoUrl = #{videoUrl},</if>
+            <if test="shopStatus != null">shopStatus = #{shopStatus},</if>
+            <if test="sTime != null">sTime = #{sTime},</if>
+            <if test="upTime != null">upTime = #{upTime},</if>
+            <if test="owner != null and owner != ''">owner = #{owner},</if>
+            <if test="follower != null">follower = #{follower},</if>
+            <if test="clientId != null">clientId = #{clientId},</if>
+            <if test="pdfUrl != null">pdfUrl = #{pdfUrl},</if>
+            <if test="shopSize != null">shopSize = #{shopSize},</if>
+            <if test="dongxian != null">dongxian = #{dongxian},</if>
+            <if test="huxing != null">huxing = #{huxing},</if>
+            <if test="menkuan != null">menkuan = #{menkuan},</if>
+            <if test="waibai != null">waibai = #{waibai},</if>
+            <if test="nianxian != null">nianxian = #{nianxian},</if>
+            <if test="dizneg != null">dizneg = #{dizneg},</if>
+            <if test="norent != null">norent = #{norent},</if>
+            <if test="dian != null">dian = #{dian},</if>
+            <if test="shui != null">shui = #{shui},</if>
+            <if test="yajin != null">yajin = #{yajin},</if>
+            <if test="zhuanrangfei != null">zhuanrangfei = #{zhuanrangfei},</if>
+            <if test="acondition != null">acondition = #{acondition},</if>
+            <if test="guanggao != null">guanggao = #{guanggao},</if>
+            <if test="allDesc != null">allDesc = #{allDesc},</if>
+            <if test="districtId != null  and districtId != ''">districtId = #{districtId}</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteShopById" parameterType="Long">
+        delete from shop where id = #{id}
+    </delete>
+
+    <delete id="updateShopNull" parameterType="Long">
+        update shop set follower = null ,upTime =  NOW() where id = #{id}
+    </delete>
+
+    <delete id="audit" parameterType="Long">
+        update shop set shopStatus = 2 ,upTime =  NOW() where id = #{id}
+    </delete>
+
+    <delete id="auditAcc" parameterType="Long">
+        update shop set shopStatus = 1,upTime = NOW()  where id = #{id}
+    </delete>
+
+    <delete id="deleteShopByIds" parameterType="String">
+        delete from shop where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getCurrentMouthShopCount" resultType="map">
+        SELECT COUNT(CASE
+                         WHEN sTime >= DATE_FORMAT(NOW(), '%Y-%m-01')
+                             AND sTime &lt; DATE_FORMAT(NOW() + INTERVAL 1 MONTH, '%Y-%m-01')
+                             THEN 1 END) AS currentCount,
+
+               COUNT(CASE
+                         WHEN sTime >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
+                             AND sTime &lt; DATE_FORMAT(NOW(), '%Y-%m-01')
+                             THEN 1 END) AS lastCount
+        FROM shop
+        where follower = #{userId}
+    </select>
+
+    <select id="getCurrentMouthShopWaitCount" resultType="map">
+        SELECT COUNT(CASE
+                         WHEN sTime >= DATE_FORMAT(NOW(), '%Y-%m-01')
+                             AND sTime &lt; DATE_FORMAT(NOW() + INTERVAL 1 MONTH, '%Y-%m-01')
+                             THEN 1 END) AS currentCount,
+
+               COUNT(CASE
+                         WHEN sTime >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
+                             AND sTime &lt; DATE_FORMAT(NOW(), '%Y-%m-01')
+                             THEN 1 END) AS lastCount
+        FROM shop
+        where follower = #{userId} and shopStatus = 0
+    </select>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BuildDetailMapper">
+    
+    <resultMap type="BuildDetail" id="BuildDetailResult">
+        <result property="id"    column="id"    />
+        <result property="taskId"    column="taskId"    />
+        <result property="versionId"    column="versionId"    />
+        <result property="buildId"    column="buildId"    />
+        <result property="buildType"    column="buildType"    />
+        <result property="buildDesc"    column="buildDesc"    />
+        <result property="buildFile"    column="buildFile"    />
+    </resultMap>
+
+    <sql id="selectBuildDetailVo">
+        select id, taskId, versionId, buildId, buildType, buildDesc, buildFile from buildDetail
+    </sql>
+
+    <select id="selectBuildDetailList" parameterType="BuildDetail" resultMap="BuildDetailResult">
+        <include refid="selectBuildDetailVo"/>
+        <where>  
+            <if test="taskId != null "> and taskId = #{taskId}</if>
+            <if test="versionId != null "> and versionId = #{versionId}</if>
+            <if test="buildId != null "> and buildId = #{buildId}</if>
+            <if test="buildType != null "> and buildType = #{buildType}</if>
+            <if test="buildDesc != null  and buildDesc != ''"> and buildDesc = #{buildDesc}</if>
+            <if test="buildFile != null "> and buildFile = #{buildFile}</if>
+        </where>
+    </select>
+    
+    <select id="selectBuildDetailById" parameterType="Long" resultMap="BuildDetailResult">
+        <include refid="selectBuildDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBuildDetail" parameterType="BuildDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into buildDetail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">taskId,</if>
+            <if test="versionId != null">versionId,</if>
+            <if test="buildId != null">buildId,</if>
+            <if test="buildType != null">buildType,</if>
+            <if test="buildDesc != null">buildDesc,</if>
+            <if test="buildFile != null">buildFile,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">#{taskId},</if>
+            <if test="versionId != null">#{versionId},</if>
+            <if test="buildId != null">#{buildId},</if>
+            <if test="buildType != null">#{buildType},</if>
+            <if test="buildDesc != null">#{buildDesc},</if>
+            <if test="buildFile != null">#{buildFile},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBuildDetail" parameterType="BuildDetail">
+        update buildDetail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskId != null">taskId = #{taskId},</if>
+            <if test="versionId != null">versionId = #{versionId},</if>
+            <if test="buildId != null">buildId = #{buildId},</if>
+            <if test="buildType != null">buildType = #{buildType},</if>
+            <if test="buildDesc != null">buildDesc = #{buildDesc},</if>
+            <if test="buildFile != null">buildFile = #{buildFile},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBuildDetailById" parameterType="Long">
+        delete from buildDetail where id = #{id}
+    </delete>
+
+    <delete id="deleteBuildDetailByIds" parameterType="String">
+        delete from buildDetail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

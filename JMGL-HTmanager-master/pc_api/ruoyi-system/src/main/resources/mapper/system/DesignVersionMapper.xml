@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DesignVersionMapper">
+    
+    <resultMap type="DesignVersion" id="DesignVersionResult">
+        <result property="id"    column="id"    />
+        <result property="taskId"    column="taskId"    />
+        <result property="versionId"    column="versionId"    />
+        <result property="desFileId"    column="desFileId"    />
+        <result property="versionDesc"    column="versionDesc"    />
+    </resultMap>
+
+    <sql id="selectDesignVersionVo">
+        select id, taskId, versionId, desFileId, versionDesc from designVersion
+    </sql>
+
+    <select id="selectDesignVersionList" parameterType="DesignVersion" resultMap="DesignVersionResult">
+        <include refid="selectDesignVersionVo"/>
+        <where>  
+            <if test="taskId != null "> and taskId = #{taskId}</if>
+            <if test="versionId != null "> and versionId = #{versionId}</if>
+            <if test="desFileId != null "> and desFileId = #{desFileId}</if>
+            <if test="versionDesc != null  and versionDesc != ''"> and versionDesc = #{versionDesc}</if>
+        </where>
+    </select>
+    
+    <select id="selectDesignVersionById" parameterType="Long" resultMap="DesignVersionResult">
+        <include refid="selectDesignVersionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDesignVersion" parameterType="DesignVersion" useGeneratedKeys="true" keyProperty="id">
+        insert into designVersion
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">taskId,</if>
+            <if test="versionId != null">versionId,</if>
+            <if test="desFileId != null">desFileId,</if>
+            <if test="versionDesc != null">versionDesc,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">#{taskId},</if>
+            <if test="versionId != null">#{versionId},</if>
+            <if test="desFileId != null">#{desFileId},</if>
+            <if test="versionDesc != null">#{versionDesc},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDesignVersion" parameterType="DesignVersion">
+        update designVersion
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskId != null">taskId = #{taskId},</if>
+            <if test="versionId != null">versionId = #{versionId},</if>
+            <if test="desFileId != null">desFileId = #{desFileId},</if>
+            <if test="versionDesc != null">versionDesc = #{versionDesc},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDesignVersionById" parameterType="Long">
+        delete from designVersion where id = #{id}
+    </delete>
+
+    <delete id="deleteDesignVersionByIds" parameterType="String">
+        delete from designVersion where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

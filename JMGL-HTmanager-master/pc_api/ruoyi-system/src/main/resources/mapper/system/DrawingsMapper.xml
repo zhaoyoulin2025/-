@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DrawingsMapper">
+
+    <resultMap type="Drawings" id="DrawingsResult">
+        <result property="id"    column="id"    />
+        <result property="designId"    column="designId"    />
+        <result property="shopId"    column="shopId"    />
+        <result property="drawingType"    column="drawingType"    />
+        <result property="itemSize"    column="itemSize"    />
+        <result property="drawingNo"    column="drawingNo"    />
+        <result property="drawingName"    column="drawingName"    />
+        <result property="fileUrl"    column="fileUrl"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="upTime"    column="upTime"    />
+        <result property="versionId"    column="versionId"    />
+        <result property="isActive"    column="isActive"    />
+        <result property="designName"    column="designName"    />
+        <result property="shopName"    column="shopName"    />
+    </resultMap>
+
+    <sql id="selectDrawingsVo">
+        select id, designId, shopId, drawingType, itemSize, drawingNo, drawingName, fileUrl, creator, createTime, upTime, versionId, isActive from drawings
+    </sql>
+
+    <select id="selectDrawingsList" parameterType="Drawings" resultMap="DrawingsResult">
+        SELECT
+        a.id, a.designId, a.shopId, a.drawingType, a.itemSize, a.drawingNo, a.drawingName, a.fileUrl, a.creator, a.createTime, a.upTime, a.versionId, a.isActive ,
+        b.nick_name AS designName,
+        c.name AS shopName
+        FROM drawings a
+        LEFT JOIN  sys_user b
+        ON a.designId = b.user_id
+        LEFT JOIN  shop c
+        ON c.id = a.shopId
+        <where>
+            <if test="designId != null "> and a.designId = #{designId}</if>
+            <if test="shopId != null "> and a.shopId = #{shopId}</if>
+            <if test="drawingType != null "> and a.drawingType = #{drawingType}</if>
+            <if test="itemSize != null  and itemSize != ''"> and a.itemSize = #{itemSize}</if>
+            <if test="drawingNo != null  and drawingNo != ''"> and a.drawingNo = #{drawingNo}</if>
+            <if test="drawingName != null  and drawingName != ''"> and a.drawingName like concat('%', #{drawingName}, '%')</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and a.fileUrl = #{fileUrl}</if>
+            <if test="creator != null  and creator != ''"> and a.creator = #{creator}</if>
+            <if test="createTime != null "> and a.createTime = #{createTime}</if>
+            <if test="upTime != null "> and a.upTime = #{upTime}</if>
+            <if test="versionId != null "> and a.versionId = #{versionId}</if>
+            <if test="isActive != null "> and a.isActive = #{isActive}</if>
+        </where>
+    </select>
+
+    <select id="selectDrawings" parameterType="Drawings" resultMap="DrawingsResult">
+        SELECT
+            a.id, a.designId, a.shopId, a.drawingType, a.itemSize, a.drawingNo, a.drawingName, a.fileUrl, a.creator, a.createTime, a.upTime, a.versionId, a.isActive ,
+            b.nick_name AS designName,
+            c.name AS clientName
+        FROM drawings a
+                 LEFT JOIN  sys_user b
+                            ON a.designId = b.user_id
+                 LEFT JOIN  shop c
+                            ON c.id = a.shopId
+        where a.designId = #{id}
+    </select>
+
+    <select id="selectDrawingsById" parameterType="Long" resultMap="DrawingsResult">
+        SELECT
+            a.id, a.designId, a.shopId, a.drawingType, a.itemSize, a.drawingNo, a.drawingName, a.fileUrl, a.creator, a.createTime, a.upTime, a.versionId, a.isActive ,
+            b.nick_name AS designName,
+            c.name AS clientName
+        FROM drawings a
+                 LEFT JOIN  sys_user b
+                            ON a.designId = b.user_id
+                 LEFT JOIN  shop c
+                            ON c.id = a.shopId
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertDrawings" parameterType="Drawings" useGeneratedKeys="true" keyProperty="id">
+        insert into drawings
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="designId != null">designId,</if>
+            <if test="shopId != null">shopId,</if>
+            <if test="drawingType != null">drawingType,</if>
+            <if test="itemSize != null">itemSize,</if>
+            <if test="drawingNo != null and drawingNo != ''">drawingNo,</if>
+            <if test="drawingName != null and drawingName != ''">drawingName,</if>
+            <if test="fileUrl != null">fileUrl,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">createTime,</if>
+            <if test="upTime != null">upTime,</if>
+            <if test="versionId != null">versionId,</if>
+            <if test="isActive != null">isActive,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="designId != null">#{designId},</if>
+            <if test="shopId != null">#{shopId},</if>
+            <if test="drawingType != null">#{drawingType},</if>
+            <if test="itemSize != null">#{itemSize},</if>
+            <if test="drawingNo != null and drawingNo != ''">#{drawingNo},</if>
+            <if test="drawingName != null and drawingName != ''">#{drawingName},</if>
+            <if test="fileUrl != null">#{fileUrl},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="upTime != null">#{upTime},</if>
+            <if test="versionId != null">#{versionId},</if>
+            <if test="isActive != null">#{isActive},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDrawings" parameterType="Drawings">
+        update drawings
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="designId != null">designId = #{designId},</if>
+            <if test="shopId != null">shopId = #{shopId},</if>
+            <if test="drawingType != null">drawingType = #{drawingType},</if>
+            <if test="itemSize != null">itemSize = #{itemSize},</if>
+            <if test="drawingNo != null and drawingNo != ''">drawingNo = #{drawingNo},</if>
+            <if test="drawingName != null and drawingName != ''">drawingName = #{drawingName},</if>
+            <if test="fileUrl != null">fileUrl = #{fileUrl},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">createTime = #{createTime},</if>
+            <if test="upTime != null">upTime = #{upTime},</if>
+            <if test="versionId != null">versionId = #{versionId},</if>
+            <if test="isActive != null">isActive = #{isActive},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDrawingsById" parameterType="Long">
+        delete from drawings where id = #{id}
+    </delete>
+
+    <delete id="deleteDrawingsByIds" parameterType="String">
+        delete from drawings where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

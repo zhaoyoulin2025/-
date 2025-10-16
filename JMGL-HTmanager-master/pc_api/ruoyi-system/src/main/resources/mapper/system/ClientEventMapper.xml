@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ClientEventMapper">
+    
+    <resultMap type="ClientEvent" id="ClientEventResult">
+        <result property="id"    column="id"    />
+        <result property="clientId"    column="clientId"    />
+        <result property="eType"    column="eType"    />
+        <result property="eTime"    column="eTime"    />
+    </resultMap>
+
+    <sql id="selectClientEventVo">
+        select id, clientId, eType, eTime from clientEvent
+    </sql>
+
+    <select id="selectClientEventList" parameterType="ClientEvent" resultMap="ClientEventResult">
+        <include refid="selectClientEventVo"/>
+        <where>  
+            <if test="clientId != null "> and clientId = #{clientId}</if>
+            <if test="eType != null "> and eType = #{eType}</if>
+            <if test="eTime != null "> and eTime = #{eTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectClientEventById" parameterType="Long" resultMap="ClientEventResult">
+        <include refid="selectClientEventVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertClientEvent" parameterType="ClientEvent" useGeneratedKeys="true" keyProperty="id">
+        insert into clientEvent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">clientId,</if>
+            <if test="eType != null">eType,</if>
+            <if test="eTime != null">eTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">#{clientId},</if>
+            <if test="eType != null">#{eType},</if>
+            <if test="eTime != null">#{eTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClientEvent" parameterType="ClientEvent">
+        update clientEvent
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientId != null">clientId = #{clientId},</if>
+            <if test="eType != null">eType = #{eType},</if>
+            <if test="eTime != null">eTime = #{eTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteClientEventById" parameterType="Long">
+        delete from clientEvent where id = #{id}
+    </delete>
+
+    <delete id="deleteClientEventByIds" parameterType="String">
+        delete from clientEvent where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

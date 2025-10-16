@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruoyi.system.mapper.DesignFlowDetailMapper">
+    <resultMap type="DesignFlowDetail" id="DesignFlowDetailResult">
+        <result property="id" column="id"/>
+        <result property="designId" column="design_id"/>
+        <result property="designerId" column="designer_id"/>
+        <result property="flowStage" column="flow_stage"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="fileName" column="file_name"/>
+        <result property="submitStatus" column="submit_status"/>
+        <result property="submitTime" column="submit_time"/>
+        <result property="auditStatus" column="audit_status"/>
+        <result property="auditFeedback" column="audit_feedback"/>
+        <result property="auditorId" column="auditor_id"/>
+        <result property="auditTime" column="audit_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 新增记录 -->
+    <insert id="insertDesignFlowDetail" parameterType="DesignFlowDetail">
+        insert into design_flow_detail (
+        design_id, designer_id, flow_stage, file_url, file_name,
+        submit_status, submit_time, audit_status, create_time, update_time
+        ) values (
+        #{designId}, #{designerId}, #{flowStage}, #{fileUrl}, #{fileName},
+        #{submitStatus}, #{submitTime}, #{auditStatus}, now(), now()
+        )
+    </insert>
+
+    <!-- 更新记录 -->
+    <update id="updateDesignFlowDetail" parameterType="DesignFlowDetail">
+        update design_flow_detail
+        <set>
+            <if test="fileUrl != null">file_url = #{fileUrl},</if>
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="submitStatus != null">submit_status = #{submitStatus},</if>
+            <if test="submitTime != null">submit_time = #{submitTime},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditFeedback != null">audit_feedback = #{auditFeedback},</if>
+            <if test="auditorId != null">auditor_id = #{auditorId},</if>
+            <if test="auditTime != null">audit_time = #{auditTime},</if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据设计ID和阶段查询 -->
+    <select id="selectByDesignIdAndStage" resultMap="DesignFlowDetailResult">
+        select * from design_flow_detail
+        where design_id = #{designId} and flow_stage = #{flowStage}
+        limit 1
+    </select>
+
+    <select id="selectByDesignIdAndStageList" resultMap="DesignFlowDetailResult">
+        select * from design_flow_detail
+        where design_id = #{designId}
+            limit 1
+    </select>
+</mapper>

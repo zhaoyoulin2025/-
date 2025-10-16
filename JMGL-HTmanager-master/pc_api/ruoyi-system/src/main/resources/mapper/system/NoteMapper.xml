@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.NoteMapper">
+
+    <resultMap type="Note" id="NoteResult">
+        <result property="id"    column="id"    />
+        <result property="businessDistrictId"    column="business_district_id"    />
+        <result property="followerId"    column="follower_id"    />
+        <result property="description"    column="description"    />
+        <result property="imageUrl"    column="image_urls"    />
+        <result property="videoUrl"    column="video_url"    />
+        <result property="checkinLocation"    column="checkin_location"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="followerName"    column="followerName"    />
+        <result property="businessName"    column="businessName"    />
+        <result property="statusss"    column="statusss"    />
+
+    </resultMap>
+
+    <sql id="selectNoteVo">
+        select id, business_district_id, follower_id, description, image_urls, video_url, checkin_location, updated_at,statusss from note
+    </sql>
+
+    <select id="selectNoteList" parameterType="Note" resultMap="NoteResult">
+        SELECT a.id, a.business_district_id, a.follower_id, a.description, a.image_urls,a.statusss, a.video_url, a.checkin_location, a.updated_at,b.name AS businessName,c.nick_name AS followerName
+        FROM note a
+        LEFT JOIN business_district b ON a.business_district_id = b.id
+        LEFT JOIN sys_user c ON c.user_id = a.follower_id
+        <where>
+            <if test="businessDistrictId != null "> and business_district_id = #{businessDistrictId}</if>
+            <if test="followerId != null "> and follower_id = #{followerId}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="imageUrls != null  and imageUrls != ''"> and image_urls = #{imageUrls}</if>
+            <if test="videoUrl != null  and videoUrl != ''"> and video_url = #{videoUrl}</if>
+            <if test="checkinLocation != null  and checkinLocation != ''"> and checkin_location = #{checkinLocation}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+            <if test="statusss != null "> and statusss = #{statusss}</if>
+            <if test="businessName != null "> and b.name LIKE CONCAT('%', #{businessName}, '%')</if>
+        </where>
+        order by a.updated_at desc
+    </select>
+
+    <select id="selectNoteById" parameterType="Long" resultMap="NoteResult">
+        <include refid="selectNoteVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectWXNoteById" parameterType="Long" resultMap="NoteResult">
+        select a.id, a.business_district_id, a.follower_id, a.description, a.image_urls, a.video_url, a.checkin_location, a.updated_at,b.name AS businessName
+        from note a LEFT JOIN business_district b ON a.business_district_id = b.id
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertNote" parameterType="Note" useGeneratedKeys="true" keyProperty="id">
+        insert into note
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="businessDistrictId != null">business_district_id,</if>
+            <if test="followerId != null">follower_id,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="imageUrl != null">image_urls,</if>
+            <if test="videoUrl != null">video_url,</if>
+            <if test="checkinLocation != null and checkinLocation != ''">checkin_location,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="traceId != null">trace_id,</if>
+            <if test="statusss != null">statusss,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="businessDistrictId != null">#{businessDistrictId},</if>
+            <if test="followerId != null">#{followerId},</if>
+            <if test="description != null and description != ''">#{description},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+            <if test="videoUrl != null">#{videoUrl},</if>
+            <if test="checkinLocation != null and checkinLocation != ''">#{checkinLocation},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="traceId != null">#{traceId},</if>
+            <if test="statusss != null">#{statusss},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNote" parameterType="Note">
+        update note
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="businessDistrictId != null">business_district_id = #{businessDistrictId},</if>
+            <if test="followerId != null">follower_id = #{followerId},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+            <if test="imageUrl != null">image_urls = #{imageUrl},</if>
+            <if test="videoUrl != null">video_url = #{videoUrl},</if>
+            <if test="statusss != null">statusss = #{statusss},</if>
+            <if test="checkinLocation != null and checkinLocation != ''">checkin_location = #{checkinLocation},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNoteById" parameterType="Long">
+        delete from note where id = #{id}
+    </delete>
+
+    <delete id="deleteNoteByIds" parameterType="String">
+        delete from note where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DesignMapper">
+
+    <resultMap type="Design" id="DesignResult">
+        <result property="id"    column="id"    />
+        <result property="shopId"    column="shopId"    />
+        <result property="clientId"    column="clientId"    />
+        <result property="designStatus"    column="designStatus"    />
+        <result property="designType"    column="designType"    />
+        <result property="designerId"    column="designerId"    />
+        <result property="sTime"    column="sTime"    />
+        <result property="upTime"    column="upTime"    />
+        <result property="clientName"    column="clientName"    />
+        <result property="desginName"    column="desginName"    />
+        <result property="shopName"    column="shopName"    />
+        <result property="current_designer_id"    column="current_designer_id"    />
+        <result property="current_designer_name"    column="current_designer_name"    />
+        <result property="current_stage_desc"    column="current_stage_desc"    />
+
+
+    </resultMap>
+
+    <sql id="selectDesignVo">
+        select id, shopId, clientId, designStatus, designType, designerId, sTime, upTime from design
+    </sql>
+
+    <select id="selectDesignList" parameterType="Design" resultMap="DesignResult">
+        SELECT
+        a.*,
+        b.name as clientName,
+        c.nick_name as desginName,
+        d.name as shopName,
+        -- 当前阶段文字描述
+        CASE a.designStatus
+        WHEN 0 THEN '待分配'
+        WHEN 1 THEN '待测量'
+        WHEN 2 THEN '平面-设计中'
+        WHEN 3 THEN '平面-审核中'
+        WHEN 4 THEN '平面-驳回'
+        WHEN 5 THEN '效果-设计中'
+        WHEN 6 THEN '效果-审核中'
+        WHEN 7 THEN '效果-驳回'
+        WHEN 8 THEN '施工-设计中'
+        WHEN 9 THEN '施工-审核中'
+        WHEN 10 THEN '施工-驳回'
+        WHEN 11 THEN '完成'
+        END AS current_stage_desc,
+        -- 当前阶段对应的设计师ID
+        CASE
+        WHEN a.designStatus = 1 THEN
+        (SELECT ar.designer_id FROM design_assign_record ar
+        WHERE ar.design_id = a.id AND ar.design_stage = 1 LIMIT 1)
+        WHEN a.designStatus BETWEEN 2 AND 4 THEN
+        (SELECT ar.designer_id FROM design_assign_record ar
+        WHERE ar.design_id = a.id AND ar.design_stage = 2 LIMIT 1)
+        WHEN a.designStatus BETWEEN 5 AND 7 THEN
+        (SELECT ar.designer_id FROM design_assign_record ar
+        WHERE ar.design_id = a.id AND ar.design_stage = 3 LIMIT 1)
+        WHEN a.designStatus BETWEEN 8 AND 10 THEN
+        (SELECT ar.designer_id FROM design_assign_record ar
+        WHERE ar.design_id = a.id AND ar.design_stage = 4 LIMIT 1)
+        ELSE NULL
+        END AS current_designer_id,
+        -- 当前阶段设计师姓名
+        (SELECT u.nick_name FROM design_assign_record ar
+        LEFT JOIN sys_user u ON ar.designer_id = u.user_id
+        WHERE ar.design_id = a.id
+        AND ar.design_stage = CASE
+        WHEN a.designStatus = 1 THEN 1
+        WHEN a.designStatus BETWEEN 2 AND 4 THEN 2
+        WHEN a.designStatus BETWEEN 5 AND 7 THEN 3
+        WHEN a.designStatus BETWEEN 8 AND 10 THEN 4
+        ELSE NULL
+        END
+        LIMIT 1) AS current_designer_name
+        FROM design a
+        LEFT JOIN client b ON a.clientId = b.id
+        LEFT JOIN sys_user c ON c.user_id = a.designerId
+        LEFT JOIN shop d ON a.shopId = d.id
+        <where>
+            <if test="shopId != null "> and a.shopId = #{shopId}</if>
+            <if test="clientId != null "> and a.clientId = #{clientId}</if>
+            <if test="designStatus != null "> and a.designStatus = #{designStatus}</if>
+            <if test="designType != null "> and a.designType = #{designType}</if>
+            <if test="designerId != null "> and a.designerId = #{designerId}</if>
+            <if test="sTime != null "> and a.sTime = #{sTime}</if>
+            <if test="upTime != null "> and a.upTime = #{upTime}</if>
+        </where>
+    </select>
+
+    <select id="selectDesignById" parameterType="Long" resultMap="DesignResult">
+        SELECT
+            a.*,
+            b.name as clientName,
+            c.nick_name as desginName,
+            d.name as shopName,
+            -- 当前阶段文字描述
+            CASE a.designStatus
+                WHEN 0 THEN '待分配'
+                WHEN 1 THEN '待测量'
+                WHEN 2 THEN '平面-设计中'
+                WHEN 3 THEN '平面-审核中'
+                WHEN 4 THEN '平面-驳回'
+                WHEN 5 THEN '效果-设计中'
+                WHEN 6 THEN '效果-审核中'
+                WHEN 7 THEN '效果-驳回'
+                WHEN 8 THEN '施工-设计中'
+                WHEN 9 THEN '施工-审核中'
+                WHEN 10 THEN '施工-驳回'
+                WHEN 11 THEN '完成'
+                END AS current_stage_desc,
+            -- 当前阶段对应的设计师ID
+            CASE
+                WHEN a.designStatus = 1 THEN
+                    (SELECT ar.designer_id FROM design_assign_record ar
+                     WHERE ar.design_id = a.id AND ar.design_stage = 1 LIMIT 1)
+        WHEN a.designStatus BETWEEN 2 AND 4 THEN
+        (SELECT ar.designer_id FROM design_assign_record ar
+        WHERE ar.design_id = a.id AND ar.design_stage = 2 LIMIT 1)
+        WHEN a.designStatus BETWEEN 5 AND 7 THEN
+        (SELECT ar.designer_id FROM design_assign_record ar
+        WHERE ar.design_id = a.id AND ar.design_stage = 3 LIMIT 1)
+        WHEN a.designStatus BETWEEN 8 AND 10 THEN
+        (SELECT ar.designer_id FROM design_assign_record ar
+        WHERE ar.design_id = a.id AND ar.design_stage = 4 LIMIT 1)
+        ELSE NULL
+        END AS current_designer_id,
+        -- 当前阶段设计师姓名
+        (SELECT u.nick_name FROM design_assign_record ar
+        LEFT JOIN sys_user u ON ar.designer_id = u.user_id
+        WHERE ar.design_id = a.id
+        AND ar.design_stage = CASE
+        WHEN a.designStatus = 1 THEN 1
+        WHEN a.designStatus BETWEEN 2 AND 4 THEN 2
+        WHEN a.designStatus BETWEEN 5 AND 7 THEN 3
+        WHEN a.designStatus BETWEEN 8 AND 10 THEN 4
+        ELSE NULL
+        END
+        LIMIT 1) AS current_designer_name
+        FROM design a
+        LEFT JOIN client b ON a.clientId = b.id
+        LEFT JOIN sys_user c ON c.user_id = a.designerId
+        LEFT JOIN shop d ON a.shopId = d.id
+    </select>
+
+    <insert id="insertDesign" parameterType="Design" useGeneratedKeys="true" keyProperty="id">
+        insert into design
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">shopId,</if>
+            <if test="clientId != null">clientId,</if>
+            <if test="designStatus != null">designStatus,</if>
+            <if test="designType != null">designType,</if>
+            <if test="designerId != null">designerId,</if>
+            <if test="sTime != null">sTime,</if>
+            <if test="upTime != null">upTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopId != null">#{shopId},</if>
+            <if test="clientId != null">#{clientId},</if>
+            <if test="designStatus != null">#{designStatus},</if>
+            <if test="designType != null">#{designType},</if>
+            <if test="designerId != null">#{designerId},</if>
+            <if test="sTime != null">#{sTime},</if>
+            <if test="upTime != null">#{upTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDesign" parameterType="Design">
+        update design
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopId != null">shopId = #{shopId},</if>
+            <if test="clientId != null">clientId = #{clientId},</if>
+            <if test="designStatus != null">designStatus = #{designStatus},</if>
+            <if test="designType != null">designType = #{designType},</if>
+            <if test="designerId != null">designerId = #{designerId},</if>
+            <if test="sTime != null">sTime = #{sTime},</if>
+            <if test="upTime != null">upTime = #{upTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDesignById" parameterType="Long">
+        delete from design where id = #{id}
+    </delete>
+
+    <delete id="deleteDesignByIds" parameterType="String">
+        delete from design where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getUnFinishDesgin" parameterType="Long" resultMap="DesignResult">
+        select id, shopId, clientId, designStatus, designType, designerId, sTime, upTime from design
+        where designStatus = '0' and designerId = #{userId}
+    </select>
+
+    <select id="clientOwnShop" resultType="com.ruoyi.system.domain.Design">
+        SELECT IFNULL(upTime,sTime) as upTime, updesignStatus from design where clientId = #{clientId} and shopId = #{shopId}
+    </select>
+
+    <select id="wxDesignList" resultType="com.ruoyi.system.domain.vo.WxDesignListVO">
+        SELECT
+            a.shopId as id,
+            a.designStatus,
+            a.designType,
+            a.designIdList,
+            b.name AS shopName,
+            b.address as shopAddress,
+            d.name as clientName,
+            d.phone as phone
+        FROM
+            (
+                SELECT
+                    shopId,
+                    GROUP_CONCAT(designStatus) AS designStatus,
+                    GROUP_CONCAT(designType) AS designType,
+                    GROUP_CONCAT(id) as designIdList
+                FROM
+                    design
+                WHERE
+                    designerId = #{userId}
+                GROUP BY
+                    shopId
+                ORDER BY
+                    sTime,designType
+            ) a
+                LEFT JOIN shop b ON a.shopId = b.id
+                LEFT JOIN shop_sign c on c.shop_id = b.id
+                LEFT JOIN client d on d.id = c.client_id
+    </select>
+
+    <update id="updateDesignStatus" >
+        update design set designStatus =#{status} where id =#{designId}
+    </update>
+
+    <select id="getCurrentMouthDesignCount" resultType="map">
+        SELECT
+        COUNT(CASE
+        WHEN sTime >= DATE_FORMAT(NOW(), '%Y-%m-01')
+        AND sTime &lt; DATE_FORMAT(NOW() + INTERVAL 1 MONTH, '%Y-%m-01')
+        THEN 1 END) AS currentCount,
+
+        COUNT(CASE
+        WHEN sTime >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
+        AND sTime &lt;DATE_FORMAT(NOW(), '%Y-%m-01')
+        THEN 1 END) AS lastCount
+        FROM design where designerId = #{userId}
+    </select>
+</mapper>

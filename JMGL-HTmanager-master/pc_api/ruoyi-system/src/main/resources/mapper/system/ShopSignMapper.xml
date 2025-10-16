@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ShopSignMapper">
+
+    <select id="followShopList" resultType="com.ruoyi.system.domain.ShopSign">
+        SELECT
+            b.name as shopName,
+            a.sale_time as saleTime,
+            c.`name` as clientName,
+            a.`year`,
+            a.money
+        FROM
+            shop_sign a
+                LEFT JOIN shop b ON a.shop_id = b.id
+                LEFT JOIN client c ON a.client_id = c.id
+            where a.sale_id = #{userId}
+    </select>
+
+    <select id="clientOwnShopList" resultType="com.ruoyi.system.domain.vo.ClientOwnShopVO">
+        SELECT
+            b.id as shopId,
+            b.name as shopName,
+            b.shopSize,
+            concat(b.area,b.address) as shopAddress,
+            a.sale_time as saleTime
+        FROM
+            shop_sign a
+                LEFT JOIN shop b ON a.shop_id = b.id
+                LEFT JOIN client c ON a.client_id = c.id
+        where a.client_id = #{clientId}
+    </select>
+
+    <select id="getCurrentMouthCount" resultType="map">
+        SELECT
+        COUNT(CASE
+        WHEN sale_time >= DATE_FORMAT(NOW(), '%Y-%m-01')
+        AND sale_time &lt; DATE_FORMAT(NOW() + INTERVAL 1 MONTH, '%Y-%m-01')
+        THEN 1 END) AS currentCount,
+
+        COUNT(CASE
+        WHEN sale_time >= DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m-01')
+        AND sale_time &lt; DATE_FORMAT(NOW(), '%Y-%m-01')
+        THEN 1 END) AS lastCount
+        FROM shop_sign where sale_id = #{userId}
+    </select>
+
+</mapper>
