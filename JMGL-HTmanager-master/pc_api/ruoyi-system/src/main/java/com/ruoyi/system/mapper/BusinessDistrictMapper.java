@@ -58,4 +58,8 @@ public interface BusinessDistrictMapper
      * @return 结果
      */
     public int deleteBusinessDistrictByIds(Long[] ids);
+
+    int queryUserShop(Long clientId);
+
+    List<BusinessDistrict> getDistrictRegionList();
 }

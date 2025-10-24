@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,6 +84,9 @@ public class WxApiController extends BaseController {
 
     @Autowired
     private IBuildManageService buildManageService;
+
+    @Autowired
+    private ClientDistrictService clientDistrictService;
 
 
     public String baiduUrl = "https://api.map.baidu.com/reverse_geocoding/v3/";
@@ -151,8 +155,41 @@ public class WxApiController extends BaseController {
     @GetMapping("/clientList")
     public AjaxResult clientList(Client client) {
         LambdaQueryWrapper<Client> clientLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        clientLambdaQueryWrapper.eq(Client::getGuideId, client.getGuideId());
-        clientLambdaQueryWrapper.eq(null != client.getClientStatus() && 9 != client.getClientStatus(), Client::getClientStatus, client.getClientStatus());
+        clientLambdaQueryWrapper.eq(null != client.getGuideId(),Client::getGuideId, client.getGuideId());
+        clientLambdaQueryWrapper.eq(null != client.getClientStatus(), Client::getClientStatus, client.getClientStatus());
+        clientLambdaQueryWrapper.eq(null != client.getExpectedCity(), Client::getExpectedCity, client.getExpectedCity());
+
+        if (StringUtils.isNotEmpty(client.getLevelName())){
+            String level = "";
+            switch (client.getLevelName()){
+                case "A":
+                    level = "1";
+                    break;
+                case "B":
+                    level = "2";
+                    break;
+                case "C":
+                    level = "3";
+                    break;
+                case "D":
+                    level = "4";
+                    break;
+            }
+            clientLambdaQueryWrapper.eq(Client::getClientLevel, level);
+
+        }
+        if(StringUtils.isNotEmpty(client.getKeyWord())) {
+            String keywords = client.getKeyWord();
+            clientLambdaQueryWrapper.and(
+                    wq -> wq
+                            .like(Client::getName, keywords)
+                            .or()
+                            .like(Client::getPhone, keywords)
+            );
+
+        }
+
+
         return AjaxResult.success("", clientService.list(clientLambdaQueryWrapper));
     }
 
@@ -251,7 +288,10 @@ public class WxApiController extends BaseController {
     public AjaxResult shopList(Shop shop) {
         LambdaQueryWrapper<Shop> shopLambdaQueryWrapper = new LambdaQueryWrapper<>();
         shopLambdaQueryWrapper.eq(Shop::getFollower, getUserId());
-        shopLambdaQueryWrapper.eq(null != shop.getShopStatus() && 9 != shop.getShopStatus(), Shop::getShopStatus, shop.getShopStatus());
+        if(null == shop.getShopStatus()){
+            shopLambdaQueryWrapper.isNull(Shop::getClientId);
+        }
+//        shopLambdaQueryWrapper.eq(null != shop.getShopStatus() && 9 != shop.getShopStatus(), Shop::getShopStatus, shop.getShopStatus());
         return AjaxResult.success("", shopService.list(shopLambdaQueryWrapper));
     }
 
@@ -270,16 +310,26 @@ public class WxApiController extends BaseController {
 
     @GetMapping("/followShopList")
     public AjaxResult followShopList() {
-        return AjaxResult.success("", shopSignService.followShopList(getUserId()));
+//        LambdaQueryWrapper<Shop> shopLambdaQueryWrapper = new LambdaQueryWrapper<>();
+//        shopLambdaQueryWrapper.eq(Shop::getFollower,getUserId());
+//        shopLambdaQueryWrapper.isNotNull(Shop::getClientId);
+        return AjaxResult.success("", shopService.wxFollowShopList(getUserId()));
+    }
+
+    @GetMapping("/myShopList")
+    public AjaxResult myShopList(Shop shop) {
+        return AjaxResult.success("", shopService.wxMyShopList(shop.getClientId()));
     }
 
     @PostMapping("/insertShopFollow")
     @ResponseBody
     public AjaxResult insertShopFollow(@RequestBody ShopSign shopSign) {
-        shopSign.setSaleTime(new Date());
-        shopSignService.save(shopSign);
+//        shopSign.setSaleTime(new Date());
+//        shopSignService.save(shopSign);
         Shop shop = new Shop();
-        shop.setId(shopSign.getId());
+        shop.setId(shopSign.getShopId());
+        shop.setClientId(shopSign.getClientId());
+        shop.setRent(new BigDecimal(shopSign.getMoney()));
         shop.setShopStatus(2);
         shopService.updateById(shop);
         return AjaxResult.success();
@@ -299,7 +349,7 @@ public class WxApiController extends BaseController {
         }
 
         // 状态条件始终添加 (IN 1,2)
-        shopLambdaQueryWrapper.in(Shop::getShopStatus, Arrays.asList(1, 2));
+        shopLambdaQueryWrapper.in(Shop::getShopStatus, Arrays.asList(0));
         return getDataTable(shopService.list(shopLambdaQueryWrapper));
     }
 
@@ -320,11 +370,7 @@ public class WxApiController extends BaseController {
     }
 
     @GetMapping("/allNoteList")
-    public AjaxResult allNoteList(String businessName) {
-        Note note = new Note();
-        if (StringUtils.isNotEmpty(businessName)){
-            note.setBusinessName(businessName);
-        }
+    public AjaxResult allNoteList(Note note) {
         note.setStatusss("1");
         return AjaxResult.success("", noteService.selectNoteList(note));
     }
@@ -335,12 +381,13 @@ public class WxApiController extends BaseController {
     }
 
     @GetMapping("/districtList")
-    public AjaxResult districtList() {
-        BusinessDistrict businessDistrict = new BusinessDistrict();
-        SysUser currentUser = getLoginUser().getUser();
-        if (!currentUser.isAdmin()) {
-            businessDistrict.setFollowerId(getUserId());
-        }
+    public AjaxResult districtList( BusinessDistrict businessDistrict) {
+
+//        SysUser currentUser = getLoginUser().getUser();
+//        if (!currentUser.isAdmin()) {
+//            businessDistrict.setFollowerId(getUserId());
+//        }
+
         return success(businessDistrictService.selectBusinessDistrictList(businessDistrict));
     }
 
@@ -380,6 +427,7 @@ public class WxApiController extends BaseController {
         if(!traceIdList.isEmpty()){
             note.setTraceId(StringUtils.join(traceIdList,","));
         }
+        note.setStatusss("0");
         noteService.insertNote(note);
         return success();
     }
@@ -402,6 +450,7 @@ public class WxApiController extends BaseController {
     public AjaxResult wxInsertDistrict(@RequestBody BusinessDistrict businessDistrict) {
         businessDistrict.setCreatorId(getUserId());
         businessDistrict.setCreatedAt(new Date());
+        businessDistrict.setStatues("0");
         businessDistrictService.wxInsertDistrict(businessDistrict);
         return success();
     }
@@ -432,5 +481,43 @@ public class WxApiController extends BaseController {
         return AjaxResult.success("",userService.getRoleMetrics(getUserId()));
     }
 
+
+    @GetMapping("/allDistrictList")
+    public TableDataInfo allDistrictList(BusinessDistrict businessDistrict ) {
+        startPage();
+        businessDistrict.setStatues("3");
+        return getDataTable(businessDistrictService.selectBusinessDistrictList(businessDistrict));
+    }
+
+    @GetMapping("/getAllFollowerList")
+    public AjaxResult getAllFollowerList() {
+        return AjaxResult.success(userService.getAllFollowerList());
+    }
+
+    @GetMapping("/getAlCustomerList")
+    public AjaxResult getAlCustomerList() {
+        return AjaxResult.success(userService.getAlCustomerList());
+    }
+
+    @GetMapping("/getDistrictRegionList")
+    public AjaxResult getDistrictRegionList() {
+        return AjaxResult.success(businessDistrictService.getDistrictRegionList());
+    }
+
+    @PostMapping("/saveUserLookBusinessDistrict")
+    public AjaxResult saveUserLookBusinessDistrict(@RequestBody ClientDistrict clientDistrict) {
+        ArrayList<ClientDistrict> clientDistricts = new ArrayList<>();
+        for (Long districtId : clientDistrict.getDistrictIds()) {
+            for (Long userId : clientDistrict.getUserIds()) {
+                ClientDistrict result = new ClientDistrict();
+                result.setBusinessDistrictId(districtId);
+                result.setUserId(userId);
+                clientDistricts.add(result);
+            }
+        }
+        clientDistrictService.saveBatch(clientDistricts);
+        clientDistrictService.deleteRepeatData();
+        return AjaxResult.success();
+    }
 
 }

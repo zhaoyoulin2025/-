@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.system.domain.DesignFlowDetail;
+import com.ruoyi.system.domain.vo.AuditDTO;
 import com.ruoyi.system.domain.vo.DesignTaskAssignDTO;
 import com.ruoyi.system.service.SendMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -95,6 +97,7 @@ public class DesignController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
+
         return success(designService.selectDesignById(id));
     }
 
@@ -148,4 +151,23 @@ public class DesignController extends BaseController
     {
         return toAjax(sendMessage.readMessage(id));
     }
+
+
+    @PostMapping("/addRecord")
+    public AjaxResult add(@RequestBody DesignFlowDetail detail)
+    {
+        return toAjax(designService.add(detail));
+    }
+
+    @PostMapping("/submitAudit")
+    public AjaxResult auditDesignRecord(@RequestBody AuditDTO auditDTO) {
+        try {
+            // 调用Service层处理审核逻辑
+            designService.auditDesignRecord(auditDTO);
+            return AjaxResult.success("审核操作成功");
+        } catch (Exception e) {
+            return AjaxResult.error("审核失败：" + e.getMessage());
+        }
+    }
+
 }

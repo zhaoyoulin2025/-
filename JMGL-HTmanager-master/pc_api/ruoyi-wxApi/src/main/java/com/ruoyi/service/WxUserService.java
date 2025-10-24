@@ -19,10 +19,7 @@ import com.ruoyi.framework.security.token.WxCodeAuthenticationToken;
 import com.ruoyi.framework.web.service.SysPasswordService;
 import com.ruoyi.framework.web.service.SysPermissionService;
 import com.ruoyi.framework.web.service.TokenService;
-import com.ruoyi.system.domain.Client;
-import com.ruoyi.system.domain.FranchiseInvestmentForm;
-import com.ruoyi.system.domain.Invite;
-import com.ruoyi.system.domain.ShopSign;
+import com.ruoyi.system.domain.*;
 import com.ruoyi.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -70,16 +67,25 @@ public class WxUserService {
     @Autowired
     private IShopSignService shopSignService;
 
+    @Autowired
+    private IShopService shopService;
+
     public AjaxResult wxUpdateUserInfo(UpdateUser user) {
         SysUser sysUser = new SysUser();
         sysUser.setUserId(user.getUserId());
-        sysUser.setNickName(user.getNickName());
-        sysUser.setAvatar(user.getAvatar());
+        if(StringUtils.isNotEmpty(user.getNickName())){
+            sysUser.setNickName(user.getNickName());
+        }
+        if(StringUtils.isNotEmpty(user.getAvatar())){
+            sysUser.setAvatar(user.getAvatar());
+        }
         sysUser.setPhonenumber(user.getPhonenumber());
         userService.updateWxUser(sysUser);
         UpdateWrapper<Client> clientUpdateWrapper = new UpdateWrapper<>();
         clientUpdateWrapper.eq("userId", user.getUserId());
-        clientUpdateWrapper.set("name", user.getNickName());
+        if(StringUtils.isNotEmpty(user.getNickName())){
+            clientUpdateWrapper.set("name", user.getNickName());
+        }
         clientUpdateWrapper.set("phone", user.getPhonenumber());
         clientUpdateWrapper.set("upTime", new Date());
         clientService.update(clientUpdateWrapper);
@@ -107,9 +113,9 @@ public class WxUserService {
         if (custemFlag) {
             if(null != client){
                 //就看是否签约过
-                LambdaQueryWrapper<ShopSign> shopSignLambdaQueryWrapper = new LambdaQueryWrapper<>();
-                shopSignLambdaQueryWrapper.eq(ShopSign::getClientId, client.getId());
-                long shopSignCount = shopSignService.count(shopSignLambdaQueryWrapper);
+                LambdaQueryWrapper<Shop> shopLambdaQueryWrapper = new LambdaQueryWrapper<>();
+                shopLambdaQueryWrapper.eq(Shop::getClientId, client.getId());
+                long shopSignCount = shopService.count(shopLambdaQueryWrapper);
                 if (shopSignCount > 0) {
                     customerType = 3;
                 } else {
@@ -142,6 +148,7 @@ public class WxUserService {
             if (count > 0) {
                 sysUser1.setInviteFlag(1);
             }
+            sysUser1.setPhonenumber(client.getPhone());
         }
         AjaxResult ajax = AjaxResult.success();
         ajax.put("user", sysUser1);

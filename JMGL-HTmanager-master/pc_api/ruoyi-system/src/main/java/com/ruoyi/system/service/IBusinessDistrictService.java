@@ -69,4 +69,8 @@ public interface IBusinessDistrictService
     int audit(DistrctStatus distrctStatus);
 
     int batchSetClient(BatchSetDistrictClientDTO batchSetDistrictClientDTO);
+
+    int queryUserShop(Long clientId);
+
+    List<BusinessDistrict> getDistrictRegionList();
 }

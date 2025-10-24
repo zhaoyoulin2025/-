@@ -4,21 +4,24 @@ import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.system.domain.Districtfollower;
-import com.ruoyi.system.domain.Shop;
+import com.ruoyi.system.domain.*;
 import com.ruoyi.system.domain.vo.BatchSetDistrictClientDTO;
 import com.ruoyi.system.domain.vo.ClientAddFollwer;
 import com.ruoyi.system.domain.vo.DistrctStatus;
+import com.ruoyi.system.domain.vo.MessageType;
 import com.ruoyi.system.mapper.DistrictfollowerMapper;
 import com.ruoyi.system.mapper.ShopMapper;
+import com.ruoyi.system.mapper.SysUserRoleMapper;
+import com.ruoyi.system.utils.MessageSender;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.BusinessDistrictMapper;
-import com.ruoyi.system.domain.BusinessDistrict;
 import com.ruoyi.system.service.IBusinessDistrictService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+
+import static com.ruoyi.system.domain.vo.MessageType.getMessageType;
 
 /**
  * 商圈信息Service业务层处理
@@ -33,6 +36,9 @@ public class BusinessDistrictServiceImpl implements IBusinessDistrictService {
 
     @Autowired
     private ShopMapper shopMapper;
+
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
 
     @Autowired
@@ -164,6 +170,7 @@ public class BusinessDistrictServiceImpl implements IBusinessDistrictService {
 
     @Override
     public int addFoller(ClientAddFollwer clientAddFollwer) {
+        //商圈设置跟进人
         Long follower = clientAddFollwer.getFollower();
         clientAddFollwer.getShopIds().forEach(c->{
             BusinessDistrict businessDistrict = businessDistrictMapper.selectBusinessDistrictById(c);
@@ -179,6 +186,17 @@ public class BusinessDistrictServiceImpl implements IBusinessDistrictService {
                         }
                     }
                     districtfollower.setFollowerId(follower);
+            Message message = new Message();
+            //通知对应的人
+            message.setReceiverId(follower+"");
+            message.setMessageType(getMessageType(MessageType.通知));
+            message.setSendTime(new Date());
+            message.setTitle("商圈跟进信息");
+            message.setContent("指派你为"+businessDistrict.getName()+"商圈的跟进人");
+            MessageSender.send(message);
+
+
+
                     districtfollowerMapper.insertDistrictfollower(districtfollower);
         });
 
@@ -189,11 +207,50 @@ public class BusinessDistrictServiceImpl implements IBusinessDistrictService {
     public int audit(DistrctStatus distrctStatus) {
 
         Long[] ids = distrctStatus.getIds();
+        String status = distrctStatus.getStatus();
+
+        // "1"驳回
+        // “0” 释放
+        //“2” 提交审核
+        // “3” 审核通过
+
         if(!ObjectUtils.isEmpty(ids)){
             for (Long id : ids) {
                 BusinessDistrict businessDistrict = businessDistrictMapper.selectBusinessDistrictById(id);
                 businessDistrict.setStatues(distrctStatus.getStatus());
                 businessDistrictMapper.updateBusinessDistrict(businessDistrict);
+                //通知审核人
+                if("2".equals(status)){
+                    Message message = new Message();
+                    //通知对应的人
+                    //查找管理员
+                    List<SysUserRole> sysList = sysUserRoleMapper.getSysList();
+                    for (SysUserRole sysUserRole : sysList) {
+                        message.setReceiverId(sysUserRole.getUserId()+"");
+                        message.setMessageType(getMessageType(MessageType.通知));
+                        message.setSendTime(new Date());
+                        message.setTitle("审核商圈通知");
+                        message.setContent("请您审核商圈："+businessDistrict.getName());
+                        MessageSender.send(message);
+                    }
+                }else if("0".equals(status)||"3".equals(status)){
+                    //通知本人
+                    Message message = new Message();
+                    Districtfollower de = new Districtfollower();
+                    de.setDistrictId(id);
+                    List<Districtfollower> districtfollowers = districtfollowerMapper.selectDistrictfollowerList(de);
+                    for (Districtfollower districtfollower : districtfollowers) {
+                        message.setReceiverId(districtfollower.getFollowerId()+"");
+                        message.setMessageType(getMessageType(MessageType.通知));
+                        message.setSendTime(new Date());
+                        message.setTitle("审核商圈通知");
+                        message.setContent("商圈审核结果："+("0".equals(status)?"审核驳回":"审核通过"));
+                        MessageSender.send(message);
+                    }
+
+                }
+
+
             }
             return ids.length;
         }
@@ -209,6 +266,29 @@ public class BusinessDistrictServiceImpl implements IBusinessDistrictService {
             businessDistrict.setStatues("4");
             businessDistrictMapper.updateBusinessDistrict(businessDistrict);
 
+            //通知跟进人，已经签约
+            Districtfollower de = new Districtfollower();
+            de.setDistrictId(districtId);
+            List<Districtfollower> districtfollowers = districtfollowerMapper.selectDistrictfollowerList(de);
+            for (Districtfollower districtfollower : districtfollowers) {
+                Message message = new Message();
+                message.setReceiverId(districtfollower.getFollowerId()+"");
+                message.setMessageType(getMessageType(MessageType.通知));
+                message.setSendTime(new Date());
+                message.setTitle("商圈签约");
+                message.setContent("商圈已经签约"+businessDistrict.getName());
+                MessageSender.send(message);
+            }
+            List<SysUserRole> sysList = sysUserRoleMapper.getSysList();
+            for (SysUserRole sysUserRole : sysList) {
+                Message message = new Message();
+                message.setReceiverId(sysUserRole.getUserId()+"");
+                message.setMessageType(getMessageType(MessageType.通知));
+                message.setSendTime(new Date());
+                message.setTitle("商圈签约");
+                message.setContent("请您审核商圈："+businessDistrict.getName());
+                MessageSender.send(message);
+            }
             //还需要创建店铺
             Shop shop = new Shop();
 
@@ -218,7 +298,6 @@ public class BusinessDistrictServiceImpl implements IBusinessDistrictService {
             //查询关联跟进人员
             Districtfollower districtfollower = new Districtfollower();
             districtfollower.setDistrictId(businessDistrict.getId());
-            List<Districtfollower> districtfollowers = districtfollowerMapper.selectDistrictfollowerList(districtfollower);
             if(CollectionUtils.isNotEmpty(districtfollowers)){
                 Districtfollower districtfollower1 = districtfollowers.get(0);
                 shop.setFollower(districtfollower1.getFollowerId()+"");
@@ -233,5 +312,15 @@ public class BusinessDistrictServiceImpl implements IBusinessDistrictService {
 
 
         return batchSetDistrictClientDTO.getDistrictIds().size();
+    }
+
+    @Override
+    public int queryUserShop(Long clientId) {
+        return businessDistrictMapper.queryUserShop(clientId);
+    }
+
+    @Override
+    public List<BusinessDistrict> getDistrictRegionList() {
+        return businessDistrictMapper.getDistrictRegionList();
     }
 }

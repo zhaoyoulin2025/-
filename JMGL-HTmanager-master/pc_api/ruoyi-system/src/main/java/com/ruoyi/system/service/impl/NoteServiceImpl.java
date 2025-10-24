@@ -1,14 +1,20 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.system.domain.Message;
 import com.ruoyi.system.domain.vo.BatchAuditNoteDTO;
+import com.ruoyi.system.domain.vo.MessageType;
+import com.ruoyi.system.utils.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.NoteMapper;
 import com.ruoyi.system.domain.Note;
 import com.ruoyi.system.service.INoteService;
+
+import static com.ruoyi.system.domain.vo.MessageType.getMessageType;
 
 /**
  * 商圈跟进笔记（含打卡）Service业务层处理
@@ -107,9 +113,20 @@ public class NoteServiceImpl implements INoteService
             Note note = noteMapper.selectNoteById(noteId);
             note.setStatusss(batchAuditNoteDTO.getStatusss()+"");
             noteMapper.updateNote(note);
+            Message message = new Message();
+
+            //通知对应的人
+            message.setReceiverId(note.getFollowerId()+"");
+            message.setMessageType(getMessageType(MessageType.通知));
+            message.setSendTime(new Date());
+            message.setTitle("商圈笔记审核通知");
+            String innerContent = batchAuditNoteDTO.getStatusss() ==1 ?"审核通过":"审核不通过";
+            message.setContent(note.getDescription()+":"+innerContent);
+            MessageSender.send(message);
 
 
         }
+
 
 
 

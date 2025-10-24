@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.system.domain.Shop;
+import com.ruoyi.system.domain.vo.WxShopSignListVO;
 
 /**
  * 标准作业流程/店铺信息Mapper接口
@@ -70,4 +71,8 @@ public interface ShopMapper extends BaseMapper<Shop>
     public Map<String,Long> getCurrentMouthShopCount(Long userId);
 
     public Map<String,Long> getCurrentMouthShopWaitCount(Long userId);
+
+    List<WxShopSignListVO> wxFollowShopList(Long followId);
+
+    List<WxShopSignListVO> wxMyShopList(Long clientId);
 }

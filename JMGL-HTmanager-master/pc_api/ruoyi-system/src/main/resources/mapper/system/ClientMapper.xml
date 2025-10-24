@@ -47,10 +47,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="improvementSuggestion"    column="improvement_suggestion"    />
         <result property="otherThink"    column="otherThink"    />
         <result property="shopResource"    column="shopResource"    />
+        <result property="joinType"    column="joinType"    />
+        <result property="wechat"    column="wechat"    />
     </resultMap>
 
     <sql id="selectClientVo">
-        select id, name, phone, userId, clientLevel, clientStatus, guideId, sTime, upTime, groupNum, likeCity, budget, isTransfor, plan, otherProject, single, ismore, firstTime, dealTime, comeTime, nowHouse, oldHouse, otherThink,shopResource from client
+        select id, name, phone, userId, clientLevel,wechat, joinType, clientStatus, guideId, sTime, upTime, groupNum, likeCity, budget, isTransfor, plan, otherProject, single, ismore, firstTime, dealTime, comeTime, nowHouse, oldHouse, otherThink,shopResource from client
     </sql>
 
     <select id="selectClientList" parameterType="Client" resultMap="ClientResult">
@@ -71,6 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.plan,
         a.otherProject,
         a.single,
+        a.wechat,
         a.ismore,
         a.firstTime,
         a.dealTime,
@@ -81,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         b.nick_name AS guideName,
         a.province,
         a.residence,
+        a.joinType,
         a.business_category,
         a.frequent_store,
         a.store_type,
@@ -129,6 +133,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectClientById" parameterType="Long" resultMap="ClientResult">
         SELECT
         a.id,
+        a.wechat,
+        a.joinType,
         a.name,
         a.phone,
         a.userId,
@@ -247,6 +253,7 @@ a.shopResource
             <if test="plan != null">plan = #{plan},</if>
             <if test="otherProject != null">otherProject = #{otherProject},</if>
             <if test="single != null">single = #{single},</if>
+            <if test="storeType != null">store_type = #{storeType},</if>
             <if test="ismore != null">ismore = #{ismore},</if>
             <if test="firstTime != null">firstTime = #{firstTime},</if>
             <if test="dealTime != null">dealTime = #{dealTime},</if>

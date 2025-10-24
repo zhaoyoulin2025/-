@@ -56,6 +56,10 @@
     <select id="selectByDesignIdAndStageList" resultMap="DesignFlowDetailResult">
         select * from design_flow_detail
         where design_id = #{designId}
-            limit 1
+    </select>
+
+    <select id="select" resultMap="DesignFlowDetailResult">
+        select * from design_flow_detail
+        where id = #{id}
     </select>
 </mapper>

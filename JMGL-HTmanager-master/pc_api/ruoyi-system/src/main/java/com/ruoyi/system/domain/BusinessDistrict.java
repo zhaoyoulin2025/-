@@ -85,6 +85,8 @@ public class BusinessDistrict extends BaseEntity
 
     private String statues;
 
+    private String keyword;
+
 
     public String getStatues() {
         return statues;
@@ -229,6 +231,14 @@ public class BusinessDistrict extends BaseEntity
     public Long getCreatorId()
     {
         return creatorId;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     @Override

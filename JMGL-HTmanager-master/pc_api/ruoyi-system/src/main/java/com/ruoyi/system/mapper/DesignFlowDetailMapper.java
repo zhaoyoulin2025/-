@@ -40,5 +40,9 @@ public interface DesignFlowDetailMapper {
     List<DesignFlowDetail> selectByDesignIdAndStageList(
             @Param("designId") Long designId
     );
+
+    DesignFlowDetail select(
+            @Param("id") Long id
+    );
 }
 

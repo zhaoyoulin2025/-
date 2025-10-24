@@ -39,11 +39,11 @@ public class Client
     }
 
     /** 姓名 */
-    @Excel(name = "姓名")
+    @Excel(name = "姓名",sort = 1)
     private String name;
 
     /** 电话号码 */
-    @Excel(name = "电话号码")
+    @Excel(name = "电话号码",sort = 4)
     private String phone;
 
     public void setWechat(String wechat) {
@@ -55,12 +55,12 @@ public class Client
     }
 
     @Getter
-    @Excel(name = "微信号")
+    @Excel(name = "微信号",sort = 3)
     private String wechat;
 
     @Getter
-    @Excel(name = "经营方式")
-    @TableField("joinType")
+    @Excel(name = "门店经营参与方式",sort = 16)
+        @TableField("joinType")
     private String joinType;
 
     /** 用户id */
@@ -73,7 +73,7 @@ public class Client
     @TableField("clientLevel")
     private String clientLevel;
 
-    @Excel(name = "客户等级")
+    @Excel(name = "客户等级",sort = 8)
     @TableField("clientLevel")
     private String clientLevelName;
 
@@ -98,7 +98,7 @@ public class Client
         this.clientStatusName = clientStatusName;
     }
 
-    @Excel(name = "客户状态")
+    @Excel(name = "客户状态",sort = 23)
     @TableField(exist = false)
     private String clientStatusName;
 
@@ -107,36 +107,36 @@ public class Client
     @TableField("guideId")
     private Long guideId;
 
-    @Excel(name = "跟进人")
+    @Excel(name = "跟进人",sort = 24)
     @TableField(exist = false)
     private String guideName;
 
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd",sort = 25)
     @TableField("sTime")
     private Date sTime;
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd",sort = 26)
     @TableField("upTime")
     private Date upTime;
 
     /** 群号 */
-    @Excel(name = "群号")
+    @Excel(name = "群号",sort = 2)
     @TableField("groupNum")
     private String groupNum;
 
     /** 意向城市 */
-    @Excel(name = "意向城市")
+//    @Excel(name = "意向城市")
     @TableField("likeCity")
     private String likeCity;
 
     /** 预算 */
-    @Excel(name = "预算")
-    @TableField("budget")
+//    @Excel(name = "预算")
+//    @TableField("budget")
     private String budget;
 
     /** 是否接受转让 */
@@ -144,7 +144,7 @@ public class Client
     @TableField("isTransfor")
     private Long isTransfor;
 
-    @Excel(name = "是否接受转让")
+    @Excel(name = "是否接受转让门店",sort = 17)
     @TableField("isTransfor")
     private String isTransforName;
 
@@ -157,12 +157,12 @@ public class Client
     }
 
     /** 后期打算 */
-    @Excel(name = "后期打算")
+//    @Excel(name = "后期打算")
     @TableField("plan")
     private String plan;
 
     /** 其他项目经验 */
-    @Excel(name = "其他项目经验")
+//    @Excel(name = "其他项目经验")
     @TableField("otherProject")
     private String otherProject;
 
@@ -171,8 +171,8 @@ public class Client
     @TableField("single")
     private Long single;
 
-    @Excel(name = "独资还是合伙")
-    @TableField("single")
+//    @Excel(name = "独资还是合伙")
+    @TableField(exist = false)
     private String singleName;
 
     public String getSingleName() {
@@ -188,7 +188,7 @@ public class Client
     @TableField("ismore")
     private Long ismore;
 
-    @Excel(name = "是否有开多店的打算")
+//    @Excel(name = "是否有开多店的打算")
     @TableField(exist = false)
     private String ismoreName;
 
@@ -202,106 +202,117 @@ public class Client
 
     /** 首次咨询时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "首次咨询时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "首次咨询时间", width = 30, dateFormat = "yyyy-MM-dd",sort = 5)
     @TableField("firstTime")
     private Date firstTime;
 
     /** 成交时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "成交时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "成交时间", width = 30, dateFormat = "yyyy-MM-dd",sort = 14)
     @TableField("dealTime")
     private Date dealTime;
 
     /** 到访次数 */
-    @Excel(name = "到访次数")
+    @Excel(name = "到访次数",sort = 7)
     @TableField("comeTime")
     private Long comeTime;
 
     /** 现在居住地 */
-    @Excel(name = "现在居住地")
+
     @TableField("nowHouse")
     private String nowHouse;
 
     /** 籍贯 */
-    @Excel(name = "籍贯")
+
     @TableField("oldHouse")
     private String oldHouse;
 
     /** 如何看待有转让费或者其他原因 */
-    @Excel(name = "如何看待有转让费或者其他原因")
+    @Excel(name = "如何看待有转让费",sort = 18)
     @TableField("otherThink")
     private String otherThink;
 
     /** 省份 */
-    @Excel(name = "省份")
+//    @Excel(name = "省份")
     private String province;
 
     /** 居住地 */
-    @Excel(name = "居住地")
+    @Excel(name = "居住地",sort = 15)
     private String residence;
 
     /** 经营品类 */
-    @Excel(name = "经营品类")
+//    @Excel(name = "经营品类")
     private String businessCategory;
 
     /** 经常光顾店 */
-    @Excel(name = "经常光顾店")
+    @Excel(name = "经常光顾店",sort = 6)
     private String frequentStore;
 
     /** 门店形式 */
-    @Excel(name = "门店形式")
+    @Excel(name = "门店形式",sort = 12)
     private String storeType;
 
     /** 投资预算 */
-    @Excel(name = "投资预算")
+    @Excel(name = "投资预算",sort = 11)
     private String investmentBudget;
 
     /** 合作模式（单店加盟/区域代理/合伙经营/技术合作/其他） */
-    @Excel(name = "合作模式", readConverterExp = "单=店加盟/区域代理/合伙经营/技术合作/其他")
+    @Excel(name = "品牌合作方式",sort = 10)
     private String cooperationMode;
 
     /** 期望开店地址 */
-    @Excel(name = "期望开店地址")
+//    @Excel(name = "期望开店地址")
     private String expectedStoreAddress;
 
     /** 期望开店省份 */
-    @Excel(name = "期望开店省份")
+//    @Excel(name = "期望开店省份")
     private String expectedProvince;
 
     /** 期望开店市 */
-    @Excel(name = "期望开店市")
+    @Excel(name = "期望开店市",sort = 9)
     private String expectedCity;
 
     /** 期望开店区 */
-    @Excel(name = "期望开店区")
+//    @Excel(name = "期望开店区")
     private String expectedDistrict;
 
     /** 从事行业（餐饮/零售/服务/教育/娱乐/其他） */
-    @Excel(name = "从事行业", readConverterExp = "餐=饮/零售/服务/教育/娱乐/其他")
+    @Excel(name = "您正在做的餐饮品牌",sort = 13)
     private String industry;
 
     /** 你认为的商圈（核心商圈/区域商圈/社区商圈/交通枢纽商圈/旅游商圈/其他） */
-    @Excel(name = "你认为的商圈", readConverterExp = "核=心商圈/区域商圈/社区商圈/交通枢纽商圈/旅游商圈/其他")
+//    @Excel(name = "你认为的商圈", readConverterExp = "核=心商圈/区域商圈/社区商圈/交通枢纽商圈/旅游商圈/其他")
     private String businessDistrict;
 
     /** 备注 */
-    @Excel(name = "备注")
+    @Excel(name = "备注",sort = 21)
     private String remarks;
 
+    @Excel(name = "店铺查看权限",sort = 22)
+    @TableField(exist = false)
+    private String shopResourceName;
+
     /** 如何看待发展 */
-    @Excel(name = "如何看待发展")
+//    @Excel(name = "如何看待发展")
     private String developmentOpinion;
 
     /** 选择我的原因 */
-    @Excel(name = "选择我的原因")
+    @Excel(name = "那你认为柒小螺的优势",sort = 19)
     private String selectionReason;
 
     /** 我们提升的建议 */
-    @Excel(name = "我们提升的建议")
+    @Excel(name = "您觉得柒小螺哪些方面需要提升",sort = 20)
     private String improvementSuggestion;
 
     @TableField(exist = false)
     private Long clientId;
+
+
+    @TableField(exist = false)
+    private String keyWord;
+
+    @TableField(exist = false)
+    private String levelName;
 
 
 
@@ -442,6 +453,9 @@ public class Client
     public void setImprovementSuggestion(String improvementSuggestion) {
         this.improvementSuggestion = improvementSuggestion;
     }
+
+
+
 
     @TableField("shopResource")
     private Integer shopResource;

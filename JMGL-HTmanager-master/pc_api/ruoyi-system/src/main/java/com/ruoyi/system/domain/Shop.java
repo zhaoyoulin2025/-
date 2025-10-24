@@ -24,9 +24,17 @@ public class Shop
 {
     private static final long serialVersionUID = 1L;
 
+    @TableField(exist = false)
     private Long warningDay;
 
+    @TableField(exist = false)
     private String process;
+
+    @TableField(exist = false)
+    private String sortProp;
+
+    @TableField(exist = false)
+    private String sortOrder;
 
     @TableField(exist = false)
     private String rate;

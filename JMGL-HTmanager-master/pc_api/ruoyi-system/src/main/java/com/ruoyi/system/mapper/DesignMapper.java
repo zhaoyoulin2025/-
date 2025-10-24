@@ -65,6 +65,9 @@ public interface DesignMapper
 
     List<Design> getUnFinishDesgin(Long userId);
 
+
+    Design getDesginByShopId( @Param("shopId")Long shopId);
+
     Design clientOwnShop(@Param("clientId") Long clientId, @Param("shopId")Long shopId);
 
     List<WxDesignListVO> wxDesignList(@Param("userId") Long userId);

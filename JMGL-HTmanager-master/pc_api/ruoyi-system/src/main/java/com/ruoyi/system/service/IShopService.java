@@ -7,6 +7,7 @@ import com.ruoyi.system.domain.Shop;
 import com.ruoyi.system.domain.vo.ClientAddFollwer;
 import com.ruoyi.system.domain.vo.ClientOwnShopVO;
 import com.ruoyi.system.domain.vo.ShopStateVO;
+import com.ruoyi.system.domain.vo.WxShopSignListVO;
 
 /**
  * 标准作业流程/店铺信息Service接口
@@ -67,5 +68,9 @@ public interface IShopService extends IService<Shop>
 
     int addFoller(ClientAddFollwer clientAddFollwer);
     List<ClientOwnShopVO> clientOwnShopList(Long clientId);
+
+    List<WxShopSignListVO> wxFollowShopList(Long followId);
+
+    List<WxShopSignListVO> wxMyShopList(Long clientId);
 
 }

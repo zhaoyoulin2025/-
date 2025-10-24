@@ -132,5 +132,9 @@ public interface SysUserMapper
 
     List<SysUser> getAllSupvisers();
 
+    List<SysUser> getAllFollowerList();
+
+    List<SysUser> getAlCustomerList();
+
     public String selectUserOpenId();
 }

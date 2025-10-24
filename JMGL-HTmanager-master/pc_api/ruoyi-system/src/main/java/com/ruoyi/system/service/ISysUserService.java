@@ -223,4 +223,8 @@ public interface ISysUserService
     public Map<String,Object> getRoleMetrics(Long userId);
 
     public String selectUserOpenId();
+
+    public  List<SysUser> getAllFollowerList();
+
+    public  List<SysUser> getAlCustomerList();
 }

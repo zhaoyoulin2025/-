@@ -11,6 +11,7 @@
         <result property="area" column="area"/>
         <result property="regionId" column="regionId"/>
         <result property="rent" column="rent"/>
+        <result property="warningDay" column="warningDay"/>
         <result property="shopDesc" column="shopDesc"/>
         <result property="surroundDesc" column="surroundDesc"/>
         <result property="trafficDesc" column="trafficDesc"/>
@@ -56,8 +57,11 @@
         select b.id, b.name, b.address, b.area, b.regionId,b.rent,b.runStatus, b.shopDesc, b.surroundDesc, b.trafficDesc, b.imgUrl,
         b.videoUrl, b.shopStatus, b.sTime, b.upTime, b.owner, b.follower, b.clientId, b.pdfUrl, b.shopSize, b.dongxian,b.districtId,
         b.huxing, b.menkuan, b.waibai, b.nianxian, b.dizneg, b.norent, b.dian, b.shui, b.yajin, b.zhuanrangfei,
-        b.acondition, b.guanggao, b.allDesc,a.nick_name as followerName,c.`name` as clientName ,(60 - DATEDIFF(b.upTime, CURDATE())) AS inValiday,
-        CONCAT(ROUND((5 - (SELECT COUNT(0) FROM build dd WHERE dd.shopId = b.id AND dd.superviseStatus = '0')) / 5 * 100,0), '%') AS rate,
+        b.acondition, b.guanggao, b.allDesc,a.nick_name as followerName,c.`name` as clientName ,
+        (60 - DATEDIFF(b.upTime, CURDATE())) AS inValiday,
+        DATEDIFF(CURDATE(),b.upTime) AS  warningDay,
+        CONCAT(ROUND((5 - (SELECT COUNT(0) FROM build dd WHERE dd.shopId = b.id AND dd.superviseStatus = '0')) / 5 * 100,0),
+            '%') AS rate,
         CASE
         WHEN b.follower IS NULL THEN '未出租'
         ELSE '已出租'
@@ -68,7 +72,6 @@
         left join client c on b.clientId = c.id
         left join business_district d on d.id = b.districtId
         <where>
-
             <if test="name != null  and name != ''">and b.name like concat('%', #{name}, '%')</if>
             <if test="address != null  and address != ''">and b.address = #{address}</if>
             <if test="runStatus != null  and runStatus != ''">and b.runStatus = #{runStatus}</if>
@@ -104,7 +107,28 @@
             <if test="guanggao != null  and guanggao != ''">and b.guanggao = #{guanggao}</if>
             <if test="allDesc != null  and allDesc != ''">and b.allDesc = #{allDesc}</if>
         </where>
-        order by b.sTime desc
+        <!-- 动态排序逻辑（仅修改order by部分） -->
+        <choose>
+            <when test="sortProp != null and sortProp != '' and sortOrder != null and sortOrder != ''">
+                order by
+                <!-- 阶段停留：直接用别名warningDay（无表前缀） -->
+                <if test="sortProp == 'warningDay'">
+                    warningDay ${sortOrder}
+                </if>
+                <!-- 进度：rate是别名，直接用，转换为数字排序 -->
+                <if test="sortProp == 'process'">
+                    b.upTime ${sortOrder}
+                </if>
+                <!-- 剩余有效期：直接用别名inValiday（无表前缀） -->
+                <if test="sortProp == 'inValiday'">
+                    inValiday ${sortOrder}
+                </if>
+            </when>
+            <otherwise>
+                order by b.sTime desc  <!-- 默认排序（sTime是表b的原始字段，需加表前缀） -->
+            </otherwise>
+        </choose>
+
     </select>
 
     <select id="selectShopById" parameterType="Long" resultMap="ShopResult">
@@ -290,5 +314,29 @@
                              THEN 1 END) AS lastCount
         FROM shop
         where follower = #{userId} and shopStatus = 0
+    </select>
+
+    <select id="wxFollowShopList" resultType="com.ruoyi.system.domain.vo.WxShopSignListVO">
+        SELECT
+            a.`name` AS shopName,
+            b.`name` AS clientName,
+            a.sTime AS saleTime
+        FROM
+            shop a
+                LEFT JOIN client b ON a.clientId = b.id
+                LEFT JOIN sys_user c ON a.follower = c.user_id
+        WHERE
+            a.follower = #{followId} and a.clientId is not null
+    </select>
+
+    <select id="wxMyShopList" resultType="com.ruoyi.system.domain.vo.WxShopSignListVO">
+        SELECT
+            a.`name` AS shopName,
+            a.address as address
+        FROM
+            shop a
+                LEFT JOIN client b ON a.clientId = b.id
+        WHERE
+            a.clientId = #{clientId}
     </select>
 </mapper>

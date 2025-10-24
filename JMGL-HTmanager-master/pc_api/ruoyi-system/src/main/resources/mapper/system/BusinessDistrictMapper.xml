@@ -64,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creatorId != null "> AND d.creator_id = #{creatorId}</if>
             <if test="followerId != null "> AND f.follower_id = #{followerId}</if>
             <if test="statues != null "> AND d.statues = #{statues}</if>
+            <if test="keyword != null and keyword != '' "> AND (d.name LIKE CONCAT('%', #{keyword}, '%') or d.address LIKE CONCAT('%', #{keyword}, '%') or d.region LIKE CONCAT('%', #{keyword}, '%'))</if>
         </where>
         GROUP BY
             d.id, d.NAME, d.address, d.region, d.created_at, d.updated_at, d.creator_id, b.name  -- 明确所有非聚合列
@@ -153,4 +154,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="queryUserShop" resultType="int">
+        select count(*) from business_district where customer_id = #{clientId}
+    </select>
+
+    <select id="getDistrictRegionList" resultMap="BusinessDistrictResult">
+        SELECT
+            id,region
+        FROM
+            business_district
+        GROUP BY
+            region
+    </select>
 </mapper>

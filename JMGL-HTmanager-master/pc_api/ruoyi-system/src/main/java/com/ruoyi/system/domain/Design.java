@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.system.domain.vo.DesignProcessRecord;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,6 +22,12 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class Design extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    private boolean auditor;
+    private boolean del;
+    private Integer current_design_stage;
+
+
 
 
     private Long stageStayTime;
@@ -44,7 +51,7 @@ public class Design extends BaseEntity
     private List<Map<String,String>> effectFiles;
     private List<Map<String,String>> constructionFiles;
 
-    private Map<String,Object> processRecords;
+    private List<DesignProcessRecord> processRecords;
 
     public String getShopName() {
         return shopName;

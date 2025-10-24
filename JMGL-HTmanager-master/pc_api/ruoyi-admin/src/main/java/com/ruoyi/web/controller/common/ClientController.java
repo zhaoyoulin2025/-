@@ -70,14 +70,20 @@ public class ClientController extends BaseController
         for (Client client1 : list) {
             client1.setClientStatusName(getCSName(client1.getClientStatus()));
             client1.setClientLevelName(getlvname(client1.getClientLevel()));
+
+
             client1.setIsTransforName(getTransname(String.valueOf(client1.getIsTransfor())));
             client1.setIsmoreName(getIsmore(String.valueOf(client1.getIsmore())));
-            
+            client1.setShopResourceName(getResourceName(client1.getShopResource()));
             client1.setSingleName(getSingName(String.valueOf(client1.getSingle())));
         }
 
         ExcelUtil<Client> util = new ExcelUtil<Client>(Client.class);
         util.exportExcel(response, list, "客户信息数据");
+    }
+
+    private String getResourceName(Integer shopResource) {
+        return 1==shopResource?"有权限":0==shopResource?"无权限":"未设置";
     }
 
     private String getIsmore(String valueOf) {
@@ -102,9 +108,13 @@ public class ClientController extends BaseController
     private String getlvname(String clientLevel) {
        // "1==普通，2=VIP,,默=认=0
         if("1".equals(clientLevel)){
-            return "普通";
+            return "A";
         }else if("2".equals(clientLevel)){
-            return "VIP";
+            return "B";
+        }else if("3".equals(clientLevel)){
+            return "C";
+        }else if("4".equals(clientLevel)){
+            return "D";
         }
         return "";
     }
@@ -116,19 +126,29 @@ public class ClientController extends BaseController
         }else if("0".equals(clientLevel)){
             return "否";
         }
-        return "";
+        return "未设置";
     }
 
     private String getCSName(Integer clientStatus) {
+
+//        0: '潜在',
+//                2: '已邀约',
+//                3: '已面谈',
+//                4: '已签约',
+//                5:'已流失'
        // 0==待跟进，1=意向中,2==已签约,3==,已放弃,0=,默=认值
         if(clientStatus ==0){
-            return "待跟进";
+            return "潜在";
         }else if(clientStatus ==1){
             return "意向中";
         }else if(clientStatus ==2){
             return "已签约";
         }else if(clientStatus ==3){
-            return "已放弃";
+            return "已面谈";
+        }else if(clientStatus ==4){
+            return "已签约";
+        }else if(clientStatus ==5){
+            return "已流失";
         }
         return "";
 

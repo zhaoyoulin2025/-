@@ -2,7 +2,9 @@ package com.ruoyi.system.service;
 
 import java.util.List;
 import com.ruoyi.system.domain.Design;
+import com.ruoyi.system.domain.DesignFlowDetail;
 import com.ruoyi.system.domain.WxDesignUpdateStatusDTO;
+import com.ruoyi.system.domain.vo.AuditDTO;
 import com.ruoyi.system.domain.vo.DesignTaskAssignDTO;
 import com.ruoyi.system.domain.vo.WxDesignListVO;
 
@@ -69,4 +71,8 @@ public interface IDesignService
     void updateDesignStatus(WxDesignUpdateStatusDTO wxDesignUpdateStatusDTO);
 
     int assignDesignTask(DesignTaskAssignDTO designTaskAssignDTO);
+
+    int add(DesignFlowDetail detail);
+
+    void auditDesignRecord(AuditDTO auditDTO);
 }

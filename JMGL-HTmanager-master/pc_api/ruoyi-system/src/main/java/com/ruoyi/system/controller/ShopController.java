@@ -138,10 +138,7 @@ public class ShopController extends BaseController
     {
         //审核通过
         int desgin = shopService.toDesgin(ids);
-        if(desgin!=0){
-            return new AjaxResult(HttpStatus.SUCCESS, "成功", null);
-        }
-        return new AjaxResult(HttpStatus.ERROR, "该店铺已经在设计中", null);
+        return new AjaxResult(HttpStatus.SUCCESS, "成功", null);
     }
 
 

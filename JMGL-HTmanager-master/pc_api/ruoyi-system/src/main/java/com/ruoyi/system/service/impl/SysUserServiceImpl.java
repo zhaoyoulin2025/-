@@ -631,6 +631,16 @@ public class SysUserServiceImpl implements ISysUserService {
         return userMapper.selectUserOpenId();
     }
 
+    @Override
+    public List<SysUser> getAllFollowerList() {
+        return userMapper.getAllFollowerList();
+    }
+
+    @Override
+    public List<SysUser> getAlCustomerList() {
+        return userMapper.getAlCustomerList();
+    }
+
     public static String calculateGrowthRate(double currentValue, double previousValue) {
         // 处理除数为0的情况
         if (previousValue == 0) {

@@ -249,4 +249,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
  	</delete>
 
+	<select id="getAllFollowerList" resultMap="SysUserResult">
+		SELECT
+			a.user_id,
+			a.nick_name
+		FROM
+			sys_user a
+				LEFT JOIN sys_user_role b ON a.user_id = b.user_id
+		WHERE
+			b.role_id != 2
+		GROUP BY
+			a.user_id
+	</select>
+
+	<select id="getAlCustomerList" resultMap="SysUserResult">
+		SELECT
+			a.user_id,
+			a.nick_name
+		FROM
+			sys_user a
+				LEFT JOIN sys_user_role b ON a.user_id = b.user_id
+		WHERE
+			b.role_id = 2
+		GROUP BY
+			a.user_id
+	</select>
+
 </mapper>

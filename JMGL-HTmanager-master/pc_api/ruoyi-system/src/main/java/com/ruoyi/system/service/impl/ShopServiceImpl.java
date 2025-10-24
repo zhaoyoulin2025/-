@@ -10,9 +10,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.BusinessDistrict;
 import com.ruoyi.system.domain.Design;
 import com.ruoyi.system.domain.Message;
-import com.ruoyi.system.domain.vo.ClientAddFollwer;
-import com.ruoyi.system.domain.vo.ClientOwnShopVO;
-import com.ruoyi.system.domain.vo.ShopStateVO;
+import com.ruoyi.system.domain.vo.*;
 import com.ruoyi.system.mapper.BusinessDistrictMapper;
 import com.ruoyi.system.mapper.DesignMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
@@ -25,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.ShopMapper;
 import com.ruoyi.system.domain.Shop;
+import org.springframework.util.ObjectUtils;
+
+import static com.ruoyi.system.domain.vo.MessageType.getMessageType;
 
 /**
  * 标准作业流程/店铺信息Service业务层处理
@@ -77,7 +78,9 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper,Shop> implements ISh
     {
         List<Shop> shops = shopMapper.selectShopList(shop);
         for (Shop shop1 : shops) {
-            shop1.setWarningDay(getDaysBetween(shop1.getUpTime()));
+            if(null != shop1.getUpTime()){
+                shop1.setWarningDay(getDaysBetween(shop1.getUpTime()));
+            }
             shop1.setProcess(getProcess(shop1.getRunStatus()));
         }
 
@@ -122,6 +125,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper,Shop> implements ISh
         Long districtId = shop.getDistrictId();
         BusinessDistrict businessDistrict = businessDistrictMapper.selectBusinessDistrictById(districtId);
         shop.setClientId(businessDistrict.getCustomerId());
+        shop.setUpTime(new Date());
         return shopMapper.insertShop(shop);
     }
 
@@ -176,7 +180,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper,Shop> implements ISh
             Shop shop = shopMapper.selectShopById(id);
             message.setReceiverId(shop.getOwner());
             message.setSendTime(new Date());
-            message.setMessageType("审核");
+            message.setMessageType(getMessageType(MessageType.通知));
             message.setTitle("店铺审核通知");
             message.setContent(shop.getName()+"审核通过");
             MessageSender.send(message);
@@ -192,7 +196,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper,Shop> implements ISh
             Message message = new Message();
             Shop shop = shopMapper.selectShopById(id);
             message.setReceiverId(shop.getOwner());
-            message.setMessageType("审核");
+            message.setMessageType(getMessageType(MessageType.通知));
             message.setSendTime(new Date());
             message.setTitle("店铺审核通知");
             message.setContent(shop.getName()+"审核不通过");
@@ -207,9 +211,13 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper,Shop> implements ISh
     public int toDesgin(Long[] ids) {
         for (Long id : ids) {
             Design design = new Design();
-
-
             //1
+
+            //先判断 当前有没有
+            Design desginByShopId = designMapper.getDesginByShopId(id);
+            if(!ObjectUtils.isEmpty(desginByShopId)){
+                return 0;
+            }
             Shop shop = shopMapper.selectShopById(id);
             design.setCreateTime(new Date());
             design.setShopId(id);
@@ -219,15 +227,13 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper,Shop> implements ISh
             design.setClientId(shop.getClientId());
             designMapper.insertDesign(design);
             //发送消息
-
-
             Message message = new Message();
             shop.setRunStatus("1");
-            message.setReceiverId(design.getDesignerId()+"");
-            message.setMessageType("设计");
+            message.setReceiverId(shop.getClientId()+"");
+            message.setMessageType(getMessageType(MessageType.通知));
             message.setSendTime(new Date());
-            message.setTitle("设计任务下达");
-            message.setContent(shop.getName()+"新建设计任务");
+            message.setTitle("店铺开始设计");
+            message.setContent(shop.getName()+"设计开始");
             MessageSender.send(message);
             shop.setUpTime(new Date());
             shopMapper.updateShop(shop);
@@ -292,5 +298,15 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper,Shop> implements ISh
         }
         return clientOwnShopVOS;
 
+    }
+
+    @Override
+    public List<WxShopSignListVO> wxFollowShopList(Long followId) {
+        return baseMapper.wxFollowShopList(followId);
+    }
+
+    @Override
+    public List<WxShopSignListVO> wxMyShopList(Long clientId) {
+        return baseMapper.wxMyShopList(clientId);
     }
 }
