@@ -1,0 +1,191 @@
+
+.follow-container {
+    padding: 20rpx;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* 顶部标题和按钮 */
+.header {
+    display: flex;
+    justify-content: space-between; /* 实现标题居左，按钮居右 */
+    align-items: center; /* 垂直居中对齐 */
+    padding: 20rpx 30rpx;
+    margin-bottom: 20rpx;
+    background-color: #fff;
+    border-radius: 16rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+.title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+}
+.add-btn {
+    width: 160rpx;
+    height: 68rpx;
+    background: linear-gradient(135deg, #1890ff, #40a9ff);
+    color: #fff;
+    font-size: 26rpx;
+    border-radius: 34rpx;
+    border: none;
+    padding: 0;
+    box-shadow: 0 4rpx 12rpx rgba(24, 144, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -10rpx; /* 负边距，让按钮更靠右 */
+}
+.add-btn:active {
+    background: linear-gradient(135deg, #0050b3, #1890ff);
+    -webkit-transform: translateY(1rpx);
+            transform: translateY(1rpx);
+}
+
+/* 记录列表 */
+.record-list {
+    margin-top: 20rpx;
+}
+.record-item {
+    background-color: #fff;
+    border-radius: 16rpx;
+    padding: 20rpx 30rpx;
+    margin-bottom: 20rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+.record-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    padding-bottom: 16rpx;
+}
+.record-detail {
+    margin-top: 20rpx;
+}
+.detail-item {
+    display: flex;
+    align-items: center;
+    font-size: 28rpx; /* 调整字体大小 */
+    color: #666;
+    margin-bottom: 20rpx; /* 调整行距 */
+}
+.detail-item::before {
+    content: '·'; /* 使用圆点作为前缀 */
+    margin-right: 10rpx;
+    color: #1890ff; /* 品牌蓝色 */
+    font-weight: bold;
+}
+.record-name {
+    font-size: 30rpx;
+    font-weight: bold;
+    color: #333;
+}
+.record-time {
+    font-size: 26rpx;
+    color: #999;
+}
+.record-content {
+    font-size: 28rpx;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* 弹窗样式 */
+.dialog-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+.dialog {
+    position: fixed;
+    left: 50%;
+    top: 30%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    width: 80%;
+    background-color: #fff;
+    border-radius: 16rpx;
+    overflow: hidden;
+    z-index: 1000;
+    box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+.dialog-header {
+    padding: 30rpx;
+    text-align: center;
+    border-bottom: 1rpx solid #f0f0f0;
+}
+.dialog-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
+}
+.dialog-body {
+    padding: 30rpx;
+}
+.picker {
+    height: 80rpx;
+    line-height: 80rpx;
+    border: 1rpx solid #e8e8e8;
+    border-radius: 8rpx;
+    padding: 0 20rpx;
+    margin-bottom: 20rpx;
+    font-size: 28rpx;
+    color: #333;
+    background-color: #f9f9f9;
+}
+.dialog-input {
+    height: 80rpx;
+    line-height: 80rpx;
+    border: 1rpx solid #e8e8e8;
+    border-radius: 8rpx;
+    padding: 0 20rpx;
+    margin-bottom: 20rpx;
+    font-size: 28rpx;
+    color: #333;
+    background-color: #f9f9f9;
+}
+.dialog-textarea {
+    width: 100%;
+    height: 240rpx;
+    border: 1rpx solid #e8e8e8;
+    border-radius: 8rpx;
+    padding: 20rpx;
+    font-size: 28rpx;
+    color: #333;
+    background-color: #f9f9f9;
+}
+.dialog-footer {
+    display: flex;
+    border-top: 1rpx solid #f0f0f0;
+}
+.dialog-footer button {
+    flex: 1;
+    height: 90rpx;
+    line-height: 90rpx;
+    text-align: center;
+    font-size: 30rpx;
+    border-radius: 0;
+    margin: 0;
+}
+.btn-cancel {
+    background-color: #f5f5f5;
+    color: #666;
+}
+.btn-save {
+    background: linear-gradient(135deg, #1890ff, #0050b3);
+    color: #fff;
+}
+
+/* 无数据提示 */
+.empty-tip {
+    text-align: center;
+    padding: 100rpx 0;
+    color: #999;
+    font-size: 28rpx;
+}
+

@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/index/serverIndex",
+    "pages/login/login",
+    "pages/login/serverLogin",
+    "pages/me/me",
+    "pages/me/bindUser",
+    "pages/question/index",
+    "pages/prebook/index",
+    "pages/me/userinfo",
+    "pages/me/mynotice/mynotice"
+  ],
+  "subPackages": [
+    {
+      "root": "customer",
+      "pages": [
+        "index",
+        "detail",
+        "follow"
+      ]
+    },
+    {
+      "root": "shops",
+      "pages": [
+        "collect"
+      ]
+    },
+    {
+      "root": "clock",
+      "pages": [
+        "index",
+        "record"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "AbuCoder",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于打卡定位"
+    }
+  },
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom",
+    "custom-tab-bar": "/components/custom-tab-bar"
+  }
+}

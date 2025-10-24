@@ -1,0 +1,239 @@
+
+.container {
+	padding: 30rpx;
+	background: #fff;
+}
+.question-item {
+	margin-bottom: 40rpx;
+}
+.question-title {
+	font-size: 28rpx;
+	color: #333;
+	margin-bottom: 20rpx;
+}
+.select-wrap {
+	padding: 0 20rpx;
+}
+.picker-content {
+	/* 增加最小高度到160rpx */
+	height: auto;
+	/* 允许自动调整高度 */
+	line-height: 1.6;
+	/* 增加行高，改善文本可读性 */
+	background: #f8f8f8;
+	border-radius: 8rpx;
+	padding: 24rpx 20rpx;
+	/* 增加上下内边距 */
+	font-size: 28rpx;
+	color: #333;
+	word-wrap: break-word;
+	white-space: normal;
+	display: flex;
+	align-items: flex-start;
+	/* 改为顶部对齐，避免长文本时的居中问题 */
+	box-sizing: border-box;
+}
+.input-wrap {
+	padding: 20rpx;
+}
+.input-wrap input {
+	width: 100%;
+	height: 80rpx;
+	background: #f8f8f8;
+	border-radius: 8rpx;
+	padding: 0 20rpx;
+	font-size: 28rpx;
+}
+.submit-wrap {
+	margin-top: 60rpx;
+	padding: 0 40rpx;
+}
+.submit-btn {
+	width: 100%;
+	height: 88rpx;
+	line-height: 88rpx;
+	background: #2979FF;
+	color: #fff;
+	font-size: 32rpx;
+	border-radius: 8rpx;
+}
+.required {
+	color: #ff0000;
+}
+.radio-group {
+	padding: 20rpx;
+}
+.radio-item {
+	display: flex;
+	align-items: center;
+	margin-bottom: 30rpx;
+}
+.radio-circle {
+	width: 40rpx;
+	height: 40rpx;
+	border-radius: 50%;
+	border: 2rpx solid #999;
+	margin-right: 20rpx;
+	position: relative;
+}
+.radio-circle.active {
+	border-color: #2979FF;
+}
+.radio-circle.active:after {
+	content: '';
+	position: absolute;
+	width: 24rpx;
+	height: 24rpx;
+	background-color: #2979FF;
+	border-radius: 50%;
+	top: 8rpx;
+	left: 8rpx;
+}
+.remark-input {
+	flex: 1;
+	height: 60rpx;
+	background: #f8f8f8;
+	border-radius: 8rpx;
+	padding: 0 20rpx;
+	font-size: 28rpx;
+	margin-left: 20rpx;
+}
+.notice-banner {
+	background-color: #FFF3CD;
+	border: 1px solid #FFEAA7;
+	border-radius: 8rpx;
+	padding: 24rpx 32rpx;
+	margin-bottom: 40rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.notice-text {
+	color: #856404;
+	font-size: 28rpx;
+	font-weight: 500;
+	text-align: center;
+	line-height: 1.4;
+}
+
+/* 城市选择器样式 */
+.city-selector {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 120rpx;
+	background: #f8f8f8;
+	border-radius: 8rpx;
+	padding: 20rpx;
+	font-size: 28rpx;
+	color: #333;
+}
+.picker-arrow {
+	color: #999;
+	font-size: 24rpx;
+	-webkit-transform: rotate(90deg);
+	        transform: rotate(90deg);
+}
+
+/* 城市选择弹窗样式 */
+.city-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.city-modal-content {
+	width: 80%;
+	max-height: 70%;
+	background: #fff;
+	border-radius: 16rpx;
+	overflow: hidden;
+}
+.city-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 30rpx;
+	border-bottom: 1rpx solid #eee;
+}
+.city-modal-title {
+	font-size: 32rpx;
+	font-weight: bold;
+	color: #333;
+}
+.city-modal-close {
+	font-size: 40rpx;
+	color: #999;
+	width: 60rpx;
+	height: 60rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.city-search-wrap {
+	padding: 20rpx 30rpx;
+	border-bottom: 1rpx solid #eee;
+}
+.city-search-input {
+	width: 100%;
+	height: 80rpx;
+	background: #f8f8f8;
+	border-radius: 8rpx;
+	padding: 0 20rpx;
+	font-size: 28rpx;
+	box-sizing: border-box;
+}
+.province-city-container {
+	display: flex;
+	height: 600rpx;
+}
+.province-list {
+	width: 40%;
+	height: 100%;
+	border-right: 1rpx solid #eee;
+}
+.province-item {
+	padding: 30rpx 20rpx;
+	border-bottom: 1rpx solid #f5f5f5;
+}
+.province-item.active {
+	background-color: #f0f0f0;
+	color: #2979FF;
+	font-weight: bold;
+}
+.city-list {
+	width: 60%;
+	height: 100%;
+}
+.city-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 30rpx;
+	border-bottom: 1rpx solid #f5f5f5;
+}
+.city-item:last-child {
+	border-bottom: none;
+}
+.city-name {
+	font-size: 28rpx;
+	color: #333;
+}
+.city-selected {
+	color: #2979FF;
+	font-size: 32rpx;
+	font-weight: bold;
+}
+.no-data {
+	padding: 60rpx 30rpx;
+	text-align: center;
+	color: #999;
+	font-size: 28rpx;
+}
+

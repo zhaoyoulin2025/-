@@ -1,0 +1,90 @@
+
+.container.data-v-363615e6 {
+	min-height: 100vh;
+	background-color: #f5f5f5;
+}
+
+/* Tab栏样式 */
+.tab-container.data-v-363615e6 {
+	display: flex;
+	background-color: #fff;
+	border-bottom: 1px solid #e5e5e5;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+.tab-item.data-v-363615e6 {
+	flex: 1;
+	padding: 15px 0;
+	text-align: center;
+	position: relative;
+	transition: all 0.3s ease;
+}
+.tab-item.active.data-v-363615e6 {
+	color: #007aff;
+	border-bottom: 2px solid #007aff;
+}
+.tab-text.data-v-363615e6 {
+	font-size: 16px;
+	font-weight: 500;
+}
+.tab-badge.data-v-363615e6 {
+	position: absolute;
+	top: 8px;
+	right: 20px;
+	background-color: #ff3b30;
+	color: white;
+	font-size: 12px;
+	padding: 2px 6px;
+	border-radius: 10px;
+	min-width: 18px;
+	height: 18px;
+	line-height: 14px;
+	text-align: center;
+}
+
+/* 列表容器 */
+.list-container.data-v-363615e6 {
+	flex: 1;
+	padding: 10px;
+}
+
+/* 预约卡片 */
+.appointment-card.data-v-363615e6 {
+	background-color: #fff;
+	border-radius: 8px;
+	padding: 15px;
+	margin-bottom: 10px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 刷新提示 */
+.refresh-tip.data-v-363615e6 {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	        transform: translate(-50%, -50%);
+	background-color: rgba(0,0,0,0.7);
+	color: white;
+	padding: 10px 20px;
+	border-radius: 4px;
+	z-index: 1000;
+}
+
+/* 确认按钮样式 */
+.confirm-btn.data-v-363615e6 {
+	background-color: #28a745;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+.confirm-btn.data-v-363615e6:hover {
+	background-color: #218838;
+}
+

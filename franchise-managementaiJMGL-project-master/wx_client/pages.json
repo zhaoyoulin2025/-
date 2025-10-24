@@ -1,0 +1,265 @@
+{
+	
+	"pages": [
+		{
+			"path": "pages/welcome/index",
+			"style": {
+				"navigationBarTitleText": "欢迎",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/welcome/customerIndex",
+			"style": {
+				"navigationBarTitleText": "欢迎",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/index/serverIndex",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/login/serverLogin",
+			"style": {
+				"navigationBarTitleText": "员工端登录",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/me/me",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/me/bindUser",
+			"style": {
+				"navigationBarTitleText": "绑定账号",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/question/index",
+			"style": {
+				"navigationBarTitleText": "问卷调查",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/prebook/index",
+			"style": {
+				"navigationBarTitleText": "我的预约",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/me/userinfo",
+			"style": {
+				"navigationBarTitleText": "用户信息",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/me/mynotice/mynotice",
+			"style": {
+				"navigationBarTitleText": "消息中心",
+				"enablePullDownRefresh": false
+			}
+		}
+	],
+	"subPackages":[
+		{
+			"root":"customer",
+			"pages":[
+				{
+					"path":"index",
+					"style": {
+								"navigationBarTitleText": "客户管理",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"detail",
+					"style": {
+								"navigationBarTitleText": "客户详情",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"follow",
+					"style": {
+								"navigationBarTitleText": "客户跟进",
+								"enablePullDownRefresh": false
+							}
+				}
+			]
+		},
+		{
+			"root":"shops",
+			"pages":[
+				{
+					"path":"collect",
+					"style": {
+								"navigationBarTitleText": "铺位采集",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"index",
+					"style": {
+								"navigationBarTitleText": "铺位管理",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"detail",
+					"style": {
+								"navigationBarTitleText": "铺位详情",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"follow",
+					"style": {
+								"navigationBarTitleText": "签约记录",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"list",
+					"style": {
+								"navigationBarTitleText": "选址推荐",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"noteList",
+					"style": {
+								"navigationBarTitleText": "商圈笔记",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"noteDetail",
+					"style": {
+								"navigationBarTitleText": "笔记详情",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"noteAdd",
+					"style": {
+								"navigationBarTitleText": "新增笔记",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"addDistrict",
+
+					"style": {
+								"navigationBarTitleText": "新增商圈",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"commonList",
+					"style": {
+								"navigationBarTitleText": "选址推荐",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"districtDetail",
+					"style": {
+								"navigationBarTitleText": "商圈笔记",
+								"enablePullDownRefresh": false
+							}
+				}
+			]
+		},
+		{
+			"root":"clock",
+			"pages":[
+				{
+					"path":"index",
+					"style": {
+								"navigationBarTitleText": "打卡",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"record",
+					"style": {
+								"navigationBarTitleText": "打卡记录",
+								"enablePullDownRefresh": false
+							}
+				}
+			]
+		},
+		{
+			"root":"design",
+			"pages":[
+				{
+					"path":"index",
+					"style": {
+								"navigationBarTitleText": "设计排期",
+								"enablePullDownRefresh": false
+							}
+				}
+			]
+		},
+		{
+			"root":"manage",
+			"pages":[
+				{
+					"path":"index",
+					"style": {
+								"navigationBarTitleText": "监理任务",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"detail",
+					"style": {
+								"navigationBarTitleText": "监理报告",
+								"enablePullDownRefresh": false
+							}
+				},
+				{
+					"path":"add",
+					"style": {
+								"navigationBarTitleText": "上传监理报告",
+								"enablePullDownRefresh": false
+							}
+				}
+			]
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "AbuCoder",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}

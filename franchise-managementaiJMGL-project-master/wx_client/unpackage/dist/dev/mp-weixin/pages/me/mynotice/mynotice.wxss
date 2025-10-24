@@ -1,0 +1,141 @@
+
+.header-action {
+	padding: 40rpx 30rpx;
+	display: flex;
+	justify-content: flex-end;
+	background-color: #fff;
+}
+.read-all {
+	color: #2979ff;
+	font-size: 27rpx;
+	padding: 10rpx 20rpx;
+}
+.tab-header {
+	padding: 20rpx 30rpx;
+	background-color: #fff;
+	border-bottom: 1rpx solid #eee;
+}
+.tab-list {
+	display: flex;
+	justify-content: space-between;
+}
+.tab-item {
+	position: relative;
+	padding: 0 10rpx;
+	font-size: 28rpx;
+	color: #666;
+}
+.tab-item.active {
+	color: #2979ff;
+	font-weight: bold;
+}
+.tab-item.active:after {
+	content: '';
+	position: absolute;
+	bottom: -10rpx;
+	left: 50%;
+	width: 40rpx;
+	height: 4rpx;
+	background: #2979ff;
+	-webkit-transform: translateX(-50%);
+	        transform: translateX(-50%);
+}
+.read-all {
+	position: absolute;
+	-webkit-transform: translateY(-50%);
+	        transform: translateY(-50%);
+	color: #2979ff;
+	font-size: 24rpx;
+	padding: 10rpx 20rpx;
+}
+.notice-list {
+	padding: 20rpx;
+}
+.notice-item {
+	display: flex;
+	padding: 20rpx;
+	background: #fff;
+	border-radius: 12rpx;
+	margin-bottom: 20rpx;
+	border-left: 8rpx solid transparent;
+}
+.notice-item.unread-system {
+	border-left-color: #2979ff;
+}
+.notice-item.unread-progress {
+	border-left-color: #19be6b;
+}
+.notice-item.unread-reminder {
+	border-left-color: #ff9900;
+}
+.notice-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10rpx;
+}
+.notice-title {
+	font-size: 30rpx;
+	color: #333;
+}
+.notice-time {
+	font-size: 24rpx;
+	color: #999;
+}
+.notice-type {
+	width: 8rpx;
+	height: auto;
+	min-height: 100rpx;
+	margin-right: 20rpx;
+	border-radius: 4rpx;
+}
+.notice-type.system {
+	background-color: #2979ff;
+}
+.notice-type.progress {
+	background-color: #19be6b;
+}
+.notice-type.reminder {
+	background-color: #ff9900;
+}
+.notice-content {
+	flex: 1;
+}
+.notice-title {
+	font-size: 30rpx;
+	color: #333;
+	margin-bottom: 10rpx;
+}
+.notice-desc {
+	font-size: 26rpx;
+	color: #666;
+	margin-bottom: 20rpx;
+}
+.notice-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.notice-time {
+	font-size: 24rpx;
+	color: #999;
+}
+.notice-detail {
+	font-size: 24rpx;
+	color: #2979ff;
+}
+.notice-type-text {
+	font-size: 24rpx;
+	margin-bottom: 10rpx;
+	font-weight: bold;
+}
+.notice-type-text.system {
+	color: #2979ff;
+}
+.notice-type-text.progress {
+	color: #19be6b;
+}
+.notice-type-text.reminder {
+	color: #ff9900;
+}
+
